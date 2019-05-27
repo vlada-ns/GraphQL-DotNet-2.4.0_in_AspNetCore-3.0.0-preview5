@@ -41,7 +41,7 @@ namespace GraphQL_1
             // ********** OBAVEZNO **********
             // ******************************
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Server=VASIC;Database=AdventureWorks2016_EXT;Trusted_Connection=True;MultipleActiveResultSets=true")));
+                options.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db")));
             services.AddTransient<ProductRepository>();
             //******< GraphQL Services >******
             services.AddScoped<IDependencyResolver>(x =>
