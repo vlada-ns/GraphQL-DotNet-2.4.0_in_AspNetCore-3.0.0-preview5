@@ -47,6 +47,7 @@ namespace GraphQL_1
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db")));
             services.AddTransient<ProductRepository>();
+            //services.AddScoped<ProductRepository>();
             //******< GraphQL Services >******
             services.AddScoped<IDependencyResolver>(x =>
                 new FuncDependencyResolver(x.GetRequiredService));

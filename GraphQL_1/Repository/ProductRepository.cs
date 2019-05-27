@@ -28,7 +28,7 @@ namespace GraphQL_1.Repository
         }
         public IList<Product> GetAll()
         {
-            //var tmp11 = _db.Product.Include(x=>x.TransactionHistory).ToList();
+            //return _db.Product.Include(x=>x.TransactionHistory).ToList();
             return _db.Product.ToList();
         }
 

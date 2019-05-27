@@ -81,8 +81,8 @@ namespace GraphQL_1.GraphQL
                 }),
                 resolve: context =>
                 {
-                    //var query = productRepository.GetProductsAsync();
-                    var query = productRepository.GetQuery();
+                    var query = productRepository.GetProductsAsync();
+                    //var query = productRepository.GetQuery();
                     //var query = productRepository.GetAll();
 
                     //var user = (ClaimsPrincipal)context.UserContext;
