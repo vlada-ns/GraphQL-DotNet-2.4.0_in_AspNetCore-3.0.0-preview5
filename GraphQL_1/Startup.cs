@@ -40,6 +40,10 @@ namespace GraphQL_1
             // ******************************
             // ********** OBAVEZNO **********
             // ******************************
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db")));
             services.AddTransient<ProductRepository>();
