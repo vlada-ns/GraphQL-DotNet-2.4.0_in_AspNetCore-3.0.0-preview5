@@ -46,8 +46,8 @@ namespace GraphQL_1
             //******< GraphQL Services >******
             services.AddScoped<IDependencyResolver>(x =>
                 new FuncDependencyResolver(x.GetRequiredService));
-            services.AddScoped<ProductType>();
-            services.AddScoped<ProductQuery>();
+            //services.AddScoped<ProductType>();
+            //services.AddScoped<ProductQuery>();
             services.AddScoped<GraphQL_1Schema>();
             services.AddGraphQL(options =>
             {
