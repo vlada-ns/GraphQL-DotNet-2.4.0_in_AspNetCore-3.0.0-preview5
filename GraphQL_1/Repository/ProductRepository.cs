@@ -1,6 +1,8 @@
 ﻿using GraphQL_1.Data;
 using GraphQL_1.Interfaces;
 using GraphQL_1.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +19,47 @@ namespace GraphQL_1.Repository
             _db = db;
         }
 
-        public Task<IList<Product>> GetAll()
+        public async Task<IList<Product>> GetProductsAsync(List<int> ids = null)
         {
-            return Task.FromResult<IList<Product>>(new List<Product>(_db.Product));
+            var tmp =  ids == null || !ids.Any()
+                ? await Task.FromResult(_db.Product.Include(x => x.TransactionHistory).ToList())
+                : await Task.FromResult(_db.Product/*.Include(x => x.TransactionHistory)*/.Where(product => ids.Contains(product.ProductId)).ToList());
+            return tmp;
         }
+        public IList<Product> GetAll()
+        {
+            //var tmp11 = _db.Product.Include(x=>x.TransactionHistory).ToList();
+            return _db.Product.ToList();
+        }
+
+        public IIncludableQueryable<Product, ICollection<TransactionHistory>> GetQuery()
+        {
+            return _db
+                 .Product
+                 .Include(x => x.TransactionHistory);
+        }
+
+        //public async Task<List<Department>> GetDepartmentsAsync(List<int> Ids = null)
+        //{
+        //    return Ids == null || !Ids.Any()
+        //        ? await Task.FromResult(InMemoryData.Departments)
+        //        : await Task.FromResult(InMemoryData.Departments.Where(department => Ids.Contains(department.Id)).ToList());
+        //}
+
+
+
+        //public IIncludableQueryable<Reservation, Guest> GetQuery()
+        //{
+        //    return _myHotelDbContext
+        //         .Reservations
+        //         .Include(x => x.Room)
+        //         .Include(x => x.Guest);
+        //}
+        //public IIncludableQueryable<Product, TransactionHistory> GetQuery()
+        //{
+        //    return _db
+        //         .Product
+        //         .Include(x => x.TransactionHistory);
+        //}
     }
 }

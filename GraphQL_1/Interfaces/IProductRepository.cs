@@ -8,6 +8,7 @@ namespace GraphQL_1.Interfaces
 {
     public interface IProductRepository
     {
-        Task<IList<Product>> GetAll();
+        Task<IList<Product>> GetProductsAsync(List<int> Ids = null);
+        IList<Product> GetAll();
     }
 }

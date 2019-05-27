@@ -13,8 +13,11 @@ namespace GraphQL_1.GraphQL.Types
         {
             Field(x => x.ProductId);
             Field(x => x.Name);
+            Field(x => x.MakeFlag, nullable: true);
+            Field(x => x.FinishedGoodsFlag, nullable: true);
             Field(x => x.ProductNumber);
-            Field(x => x.Color);
+            Field(x => x.Color, nullable: true);
+            Field<ListGraphType<TransactionHistoryType>>(nameof(Product.TransactionHistory));
         }
     }
 }

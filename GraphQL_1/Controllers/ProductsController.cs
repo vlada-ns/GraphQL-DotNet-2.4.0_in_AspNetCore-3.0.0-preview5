@@ -20,10 +20,21 @@ namespace GraphQL_1.Controllers
             _productRepository = productRepository;
         }
 
+        //[HttpGet("[action]")]
+        //public IEnumerable<Product> List()
+        //{
+        //    return _productRepository.GetAll();
+        //}
+        //[HttpGet("[action]")]
+        //public async Task<IList<Product>> List()
+        //{
+        //    return await _productRepository.GetProductsAsync();
+        //}
+
         [HttpGet("[action]")]
-        public async Task<IEnumerable<Product>> List()
+        public async Task<IList<Product>> List(List<int> ids)
         {
-            return await _productRepository.GetAll();
+            return await _productRepository.GetProductsAsync(ids);
         }
 
         //// GET: api/<controller>
