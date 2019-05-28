@@ -11,13 +11,12 @@ using System.Threading.Tasks;
 
 namespace GraphQL_1.GraphQL
 {
-    public class ProductQuery : ObjectGraphType
+    public class AdventureWorksQuery : ObjectGraphType
     {
-        public ProductQuery(ProductRepository productRepository)
+        public AdventureWorksQuery(ProductRepository productRepository, ProductSubcategoryRepository productSubcategoryRepository)
         {
-            /*
-             -- Simple test query --
-                query TestQuery {
+            /*-- Simple test query --
+                query Products {
                     products(productId: 1) {
                         productId: productId
                         name,
@@ -31,6 +30,12 @@ namespace GraphQL_1.GraphQL
                             transactionType,
                             quantity,
                             actualCost,
+                            modifiedDate
+                        }
+                        productSubcategory{
+                            productSubcategoryId
+                            name
+                            rowguid
                             modifiedDate
                         }
                     }
@@ -81,12 +86,12 @@ namespace GraphQL_1.GraphQL
                 }),
                 resolve: context =>
                 {
-                    var query = productRepository.GetProductsAsync();
-                    //var query = productRepository.GetQuery();
-                    //var query = productRepository.GetAll();
-
                     //var user = (ClaimsPrincipal)context.UserContext;
                     //var isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
+
+                    //var query = productRepository.GetQuery();
+                    //var query = productRepository.GetAll();
+                    var query = productRepository.GetProductsAsync();
 
                     var productId = context.GetArgument<int?>("productId");
                     if (productId.HasValue)
@@ -158,6 +163,54 @@ namespace GraphQL_1.GraphQL
                     //}
 
                     //return query.ToList();
+                    return query;
+                }
+            );
+
+            /*-- Simple test query --
+            query ProductSubcategory{
+                productSubcategories{
+                    productSubcategoryId
+                    name
+                    rowguid
+                    modifiedDate
+                    product{
+                        productId
+                        name
+                        weight
+                    }
+                    productCategory{
+                        productCategoryId
+                        name
+                    }
+                }
+            }*/
+
+            Field<ListGraphType<ProductSubcategoryType>>(
+                "productSubcategories",
+                arguments: new QueryArguments(new List<QueryArgument>
+                {
+                    new QueryArgument<IdGraphType>
+                    {
+                        Name = "productSubcategoryId"
+                    },
+                    new QueryArgument<StringGraphType>
+                    {
+                        Name = "name"
+                    },
+                    new QueryArgument<IdGraphType>
+                    {
+                        Name = "Rowguid"
+                    },
+                    new QueryArgument<DateTimeGraphType>
+                    {
+                        Name = "ModifiedDate"
+                    }
+                }),
+                resolve: context =>
+                {
+                    //var query = productSubcategoryRepository.GetAllAsync();
+                    var query = productSubcategoryRepository.GetAll();
                     return query;
                 }
             );

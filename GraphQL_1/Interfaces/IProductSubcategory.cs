@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace GraphQL_1.Interfaces
 {
-    public interface IProductRepository
+    interface IProductSubcategory
     {
-        Task<IList<Product>> GetProductsAsync(List<int> Ids = null);
-        IQueryable<Product> GetAll(int id);
+        Task<IList<ProductSubcategory>> GetAllAsync(List<int> ids = null);
     }
 }

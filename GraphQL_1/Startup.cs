@@ -46,14 +46,15 @@ namespace GraphQL_1
             });
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db")));
-            services.AddTransient<ProductRepository>();
             //services.AddScoped<ProductRepository>();
+            services.AddTransient<ProductRepository>();
+            services.AddTransient<ProductSubcategoryRepository>();
             //******< GraphQL Services >******
             services.AddScoped<IDependencyResolver>(x =>
                 new FuncDependencyResolver(x.GetRequiredService));
             //services.AddScoped<ProductType>();
             //services.AddScoped<ProductQuery>();
-            services.AddScoped<GraphQL_1Schema>();
+            services.AddScoped<AdventureWorksSchema>();
             services.AddGraphQL(options =>
             {
                 options.EnableMetrics = true;
@@ -85,7 +86,7 @@ namespace GraphQL_1
             app.UseSpaStaticFiles();
 
             // app.UseGraphQL<WebApp5Schema>("/graphql");
-            app.UseGraphQL<GraphQL_1Schema>();
+            app.UseGraphQL<AdventureWorksSchema>();
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
 
             app.UseMvc(routes =>

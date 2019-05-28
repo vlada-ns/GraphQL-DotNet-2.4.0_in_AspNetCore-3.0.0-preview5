@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace GraphQL_1.GraphQL
 {
-    public class GraphQL_1Schema : Schema
+    public class AdventureWorksSchema : Schema
     {
-        public GraphQL_1Schema(IDependencyResolver resolver) : base(resolver)
+        public AdventureWorksSchema(IDependencyResolver resolver) : base(resolver)
         {
-            Query = resolver.Resolve<ProductQuery>();
+            Query = resolver.Resolve<AdventureWorksQuery>();
         }
     }
 }

@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
+import { AdventureWorks } from './components/AdventureWorks';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -14,6 +15,7 @@ export default class App extends Component {
         <Route exact path='/' component={Home} />
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} />
+        <Route path='/AdventureWorks' component={AdventureWorks} />
         <Route path='/ui/playground' component={() => {
             window.location.href = 'https://localhost:44385/ui/playground';
             return null;

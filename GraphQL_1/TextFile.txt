@@ -1,0 +1,10 @@
+﻿<p>Search product by Id:
+                    <input type="number" name="productId" onChange={this.setProductId} min={1} max={9999} />
+                    <button onClick={this.refreshProducts}>Search</button>
+                </p>
+
+<form action="/" onSubmit={this.refreshProducts}>
+                        Search product by id from form:
+                        <input type="number" name="productId" onChange={this.setProductId} min="1" max="9999" />
+                        <input type="submit" />
+                    </form>

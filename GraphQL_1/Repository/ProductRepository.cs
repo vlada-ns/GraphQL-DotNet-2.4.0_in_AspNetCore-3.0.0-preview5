@@ -29,10 +29,14 @@ namespace GraphQL_1.Repository
                 : await Task.FromResult(_db.Product/*.Include(x => x.TransactionHistory)*/.Where(product => ids.Contains(product.ProductId)).ToList());
             return tmp;
         }
-        public IList<Product> GetAll()
+        public IQueryable<Product> GetAll(int id = -1)
         {
-            //return _db.Product.Include(x=>x.TransactionHistory).ToList();
-            return _db.Product.ToList();
+            if (id == -1)
+            {
+                //return _db.Product.Include(x=>x.TransactionHistory).ToList();
+                return _db.Product;
+            }
+            return _db.Product.Where(x=>x.ProductId == id);
         }
 
         public IIncludableQueryable<Product, ICollection<TransactionHistory>> GetQuery()

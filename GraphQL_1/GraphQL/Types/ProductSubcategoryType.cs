@@ -12,9 +12,11 @@ namespace GraphQL_1.GraphQL.Types
         public ProductSubcategoryType()
         {
             Field(x => x.ProductSubcategoryId);
-            Field(x => x.Name);
+            Field(x => x.Name).Description("Name of ProductSubcategory");
             Field(x => x.Rowguid, type: typeof(IdGraphType)).Description("Rowguid of the ProductSubcategory");
-            Field(x => x.ModifiedDate);
+            Field(x => x.ModifiedDate).Description("ModifiedDate of ProductSubcategory");
+            Field<ProductCategoryType>(nameof(ProductSubcategory.ProductCategory));
+            Field<ListGraphType<ProductType>>(nameof(ProductSubcategory.Product));
         }
     }
 }
