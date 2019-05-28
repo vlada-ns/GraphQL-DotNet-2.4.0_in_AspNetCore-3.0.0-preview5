@@ -18,6 +18,7 @@ namespace GraphQL_1.GraphQL.Types
             Field(x => x.ProductNumber);
             Field(x => x.Color, nullable: true);
             Field<ListGraphType<TransactionHistoryType>>(nameof(Product.TransactionHistory));
+            Field<ListGraphType<ProductSubcategoryType>>(nameof(Product.ProductSubcategory));
         }
     }
 }

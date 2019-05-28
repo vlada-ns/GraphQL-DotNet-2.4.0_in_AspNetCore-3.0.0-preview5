@@ -27,11 +27,11 @@ namespace GraphQL_1.GraphQL
                         color
                         transactionHistory{
                             transactionId,
-                            TransactionDate,
-                            TransactionType,
-                            Quantity,
-                            ActualCost,
-                            ModifiedDate
+                            transactionDate,
+                            transactionType,
+                            quantity,
+                            actualCost,
+                            modifiedDate
                         }
                     }
                 }

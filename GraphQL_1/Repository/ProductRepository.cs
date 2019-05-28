@@ -22,7 +22,10 @@ namespace GraphQL_1.Repository
         public async Task<IList<Product>> GetProductsAsync(List<int> ids = null)
         {
             var tmp =  ids == null || !ids.Any()
-                ? await Task.FromResult(_db.Product.Include(x => x.TransactionHistory).ToList())
+                ? await Task.FromResult(_db.Product
+                    .Include(x => x.TransactionHistory)
+                    .Include(x=>x.ProductSubcategory)
+                    .ToList())
                 : await Task.FromResult(_db.Product/*.Include(x => x.TransactionHistory)*/.Where(product => ids.Contains(product.ProductId)).ToList());
             return tmp;
         }

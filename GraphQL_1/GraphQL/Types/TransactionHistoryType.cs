@@ -12,11 +12,11 @@ namespace GraphQL_1.GraphQL.Types
         public TransactionHistoryType()
         {
             Field(x => x.TransactionId);
-            //Field(x => x.TransactionDate);
-            //Field(x => x.TransactionType);
-            //Field(x => x.Quantity);
-            //Field(x => x.ActualCost);
-            //Field(x => x.ModifiedDate);
+            Field(x => x.TransactionDate);
+            Field(x => x.TransactionType);
+            Field(x => x.Quantity);
+            Field(x => x.ActualCost);
+            Field(x => x.ModifiedDate);
         }
     }
 }
