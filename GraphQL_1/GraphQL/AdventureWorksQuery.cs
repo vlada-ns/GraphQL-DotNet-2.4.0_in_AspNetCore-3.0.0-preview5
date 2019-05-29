@@ -78,11 +78,11 @@ namespace GraphQL_1.GraphQL
                     new QueryArgument<StringGraphType>
                     {
                         Name = "color"
-                    }/*,
-                    new QueryArgument<TransactionHistoryType>
+                    },
+                    new QueryArgument<StringGraphType>
                     {
-                        Name = "transactionHistory"
-                    }*/
+                        Name = "order"
+                    }
                 }),
                 resolve: context =>
                 {
@@ -91,19 +91,22 @@ namespace GraphQL_1.GraphQL
 
                     //var query = productRepository.GetQuery();
                     //var query = productRepository.GetAll();
-                    var query = productRepository.GetProductsAsync();
+                    var query = productRepository.GetAll();
 
                     var productId = context.GetArgument<int?>("productId");
-                    if (productId.HasValue)
+                    var order = context.GetArgument<string>("order");
+
+                    if (productId.HasValue && productId.Value != -411)
                     {
-                        if (productId.Value <= 0)
+                        if (productId.Value <= 0 || productId.Value >= 10000)
                         {
-                            context.Errors.Add(new ExecutionError("productId must be greater than zero!"));
+                            context.Errors.Add(new ExecutionError("productId must be number between 1 and 9999!"));
                             return new List<Product>();
                         }
                         List<int> listProductId = new List<int>();
                         listProductId.Add(productId.Value);
-                        return productRepository.GetProductsAsync(listProductId);
+                        //return productRepository.GetProductsAsync(listProductId);
+                        return productRepository.GetAll(productId.Value);
                     }
 
                     var productIds = context.GetArgument<List<int?>>("productIds");

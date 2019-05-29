@@ -17,7 +17,7 @@ export default class App extends Component {
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/AdventureWorks' component={AdventureWorks} />
         <Route path='/ui/playground' component={() => {
-            window.location.href = 'https://localhost:44385/ui/playground';
+            window.open(window.location.origin + "/ui/playground", '_blank');
             return null;
         }} />
       </Layout>

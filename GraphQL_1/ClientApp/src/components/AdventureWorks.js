@@ -8,14 +8,8 @@ export class AdventureWorks extends Component {
         this.state = {
             forecasts: [],
             loading: true,
-            productId: -1,
-            graphqlQuery: `?query=
-                            {
-                                products {
-                                    productId
-                                    name
-                                }
-                            }`
+            productId: -411,
+            graphqlQuery: ``   //${this.state.productId=1}
         };
 
         this.setProductId = this.setProductId.bind(this);
@@ -57,6 +51,9 @@ export class AdventureWorks extends Component {
     }
 
     refreshProducts(event) {
+        if (this.state.productId == '') {
+            this.state.productId = -411;
+        }
         this.populateWeatherData();
         this.render();
     }
@@ -80,23 +77,12 @@ export class AdventureWorks extends Component {
         );
     }
 
-    //////////////////////////   (3)   ////////////////////////////
-    fetchDirectlyFromGraphQl() {
-        const query = 
-            `?query=
-            {
-                products {
-                    productId
-                    name
-                }
-            }`
-    }
-
-
     async populateWeatherData() {
-        const response = await fetch('api/Products/list?productId=' + this.state.productId);
-        //const response = await fetch('graphql' + this.state.graphqlQuery);
+        this.state.graphqlQuery = '?query={products(productId:' + this.state.productId + '){productId:productId,name,productNumber,color}}'
+        //const response = await fetch('api/Products/list?productId=' + this.state.productId);
+        const response = await fetch('graphql' + this.state.graphqlQuery);
         const data = await response.json();
-        this.setState({ forecasts: data, loading: false });
+        const data2 = data.data.products;
+        this.setState({ forecasts: data2, loading: false });
     }
 }
