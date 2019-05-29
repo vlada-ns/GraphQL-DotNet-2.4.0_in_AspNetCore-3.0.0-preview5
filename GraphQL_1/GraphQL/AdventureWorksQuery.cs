@@ -89,12 +89,13 @@ namespace GraphQL_1.GraphQL
                     //var user = (ClaimsPrincipal)context.UserContext;
                     //var isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
 
-                    //var query = productRepository.GetQuery();
-                    //var query = productRepository.GetAll();
                     var query = productRepository.GetAll();
 
                     var productId = context.GetArgument<int?>("productId");
                     var order = context.GetArgument<string>("order");
+                    // #############################################################################################################
+                    // MOZDA JE BOLJE DA NAPRAVIM NEKI OBJEKAT U KOJI CU DA STRPAM SVE ZA SORTIRANJE, FILTRIRANJE, PAGINACIJU... !!!
+                    // #############################################################################################################
 
                     if (productId.HasValue && productId.Value != -411)
                     {
