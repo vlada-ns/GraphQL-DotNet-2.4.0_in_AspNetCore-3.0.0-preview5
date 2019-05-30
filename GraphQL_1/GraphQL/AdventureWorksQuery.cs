@@ -51,51 +51,29 @@ namespace GraphQL_1.GraphQL
                 "products",
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
-                    new QueryArgument<IdGraphType>
-                    {
-                        Name = "productId"
-                    },
-                    new QueryArgument<ListGraphType<IdGraphType>>
-                    {
-                        Name = "productIds"
-                    },
-                    new QueryArgument<StringGraphType>
-                    {
-                        Name = "name"
-                    },
-                    new QueryArgument<BooleanGraphType>
-                    {
-                        Name = "makeFlag"
-                    },
-                    new QueryArgument<BooleanGraphType>
-                    {
-                        Name = "finishedGoodsFlag"
-                    },
-                    new QueryArgument<StringGraphType>
-                    {
-                        Name = "productNumber"
-                    },
-                    new QueryArgument<StringGraphType>
-                    {
-                        Name = "color"
-                    },
-                    new QueryArgument<StringGraphType>
-                    {
-                        Name = "order"
-                    }
+                    new QueryArgument<IdGraphType> { Name = "productId" },
+                    new QueryArgument<ListGraphType<IdGraphType>> { Name = "productIds" },
+                    new QueryArgument<StringGraphType> { Name = "name" },
+                    new QueryArgument<BooleanGraphType> { Name = "makeFlag" },
+                    new QueryArgument<BooleanGraphType> { Name = "finishedGoodsFlag" },
+                    new QueryArgument<StringGraphType> { Name = "productNumber" },
+                    new QueryArgument<StringGraphType> { Name = "color" },
+                    new QueryArgument<DecimalGraphType> { Name = "standardCost" },
+                    new QueryArgument<DecimalGraphType> { Name = "listPrice" },
+                    new QueryArgument<StringGraphType> { Name = "size" },
+                    new QueryArgument<StringGraphType> { Name = "sizeUnitMeasureCode" },
+                    new QueryArgument<StringGraphType> { Name = "weightUnitMeasureCode" },
+                    new QueryArgument<DateTimeGraphType> { Name = "sellStartDate" },
+                    new QueryArgument<DateTimeGraphType> { Name = "sellEndDate" },
+                    new QueryArgument<StringGraphType> { Name = "order" }
                 }),
                 resolve: context =>
                 {
                     //var user = (ClaimsPrincipal)context.UserContext;
                     //var isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
 
-                    var query = productRepository.GetAll();
-
                     var productId = context.GetArgument<int?>("productId");
                     var order = context.GetArgument<string>("order");
-                    // #############################################################################################################
-                    // MOZDA JE BOLJE DA NAPRAVIM NEKI OBJEKAT U KOJI CU DA STRPAM SVE ZA SORTIRANJE, FILTRIRANJE, PAGINACIJU... !!!
-                    // #############################################################################################################
 
                     if (productId.HasValue && productId.Value != -411)
                     {
@@ -104,10 +82,10 @@ namespace GraphQL_1.GraphQL
                             context.Errors.Add(new ExecutionError("productId must be number between 1 and 9999!"));
                             return new List<Product>();
                         }
-                        List<int> listProductId = new List<int>();
-                        listProductId.Add(productId.Value);
+                        //List<int> listProductId = new List<int>();
+                        //listProductId.Add(productId.Value);
                         //return productRepository.GetProductsAsync(listProductId);
-                        return productRepository.GetAll(productId.Value);
+                        return productRepository.GetAll(order, productId.Value);
                     }
 
                     var productIds = context.GetArgument<List<int?>>("productIds");
@@ -166,7 +144,7 @@ namespace GraphQL_1.GraphQL
                     //    return reservationRepository.GetQuery().Where(r => r.Room.Status == roomStatus.Value);
                     //}
 
-                    //return query.ToList();
+                    var query = productRepository.GetAll();
                     return query;
                 }
             );
@@ -194,22 +172,10 @@ namespace GraphQL_1.GraphQL
                 "productSubcategories",
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
-                    new QueryArgument<IdGraphType>
-                    {
-                        Name = "productSubcategoryId"
-                    },
-                    new QueryArgument<StringGraphType>
-                    {
-                        Name = "name"
-                    },
-                    new QueryArgument<IdGraphType>
-                    {
-                        Name = "Rowguid"
-                    },
-                    new QueryArgument<DateTimeGraphType>
-                    {
-                        Name = "ModifiedDate"
-                    }
+                    new QueryArgument<IdGraphType> { Name = "productSubcategoryId" },
+                    new QueryArgument<StringGraphType> { Name = "name" },
+                    new QueryArgument<IdGraphType> { Name = "Rowguid" },
+                    new QueryArgument<DateTimeGraphType> { Name = "ModifiedDate" }
                 }),
                 resolve: context =>
                 {
