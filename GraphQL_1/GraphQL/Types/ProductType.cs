@@ -11,7 +11,7 @@ namespace GraphQL_1.GraphQL.Types
     {
         public ProductType()
         {
-            Field(x => x.ProductId);
+            Field(x => x.ProductId);     //Field("ids", x => x.ProductId);
             Field(x => x.Name).Description("Name of Product");
             Field(x => x.ProductNumber);
             Field(x => x.MakeFlag, nullable: true);

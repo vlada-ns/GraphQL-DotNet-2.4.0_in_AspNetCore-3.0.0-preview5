@@ -52,19 +52,19 @@ namespace GraphQL_1.GraphQL
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
                     new QueryArgument<IdGraphType> { Name = "productId" },
-                    new QueryArgument<ListGraphType<IdGraphType>> { Name = "productIds" },
-                    new QueryArgument<StringGraphType> { Name = "name" },
-                    new QueryArgument<BooleanGraphType> { Name = "makeFlag" },
-                    new QueryArgument<BooleanGraphType> { Name = "finishedGoodsFlag" },
-                    new QueryArgument<StringGraphType> { Name = "productNumber" },
-                    new QueryArgument<StringGraphType> { Name = "color" },
-                    new QueryArgument<DecimalGraphType> { Name = "standardCost" },
-                    new QueryArgument<DecimalGraphType> { Name = "listPrice" },
-                    new QueryArgument<StringGraphType> { Name = "size" },
-                    new QueryArgument<StringGraphType> { Name = "sizeUnitMeasureCode" },
-                    new QueryArgument<StringGraphType> { Name = "weightUnitMeasureCode" },
-                    new QueryArgument<DateTimeGraphType> { Name = "sellStartDate" },
-                    new QueryArgument<DateTimeGraphType> { Name = "sellEndDate" },
+                    //new QueryArgument<ListGraphType<IdGraphType>> { Name = "productIds" },
+                    //new QueryArgument<StringGraphType> { Name = "name" },
+                    //new QueryArgument<BooleanGraphType> { Name = "makeFlag" },
+                    //new QueryArgument<BooleanGraphType> { Name = "finishedGoodsFlag" },
+                    //new QueryArgument<StringGraphType> { Name = "productNumber" },
+                    //new QueryArgument<StringGraphType> { Name = "color" },
+                    //new QueryArgument<DecimalGraphType> { Name = "standardCost" },
+                    //new QueryArgument<DecimalGraphType> { Name = "listPrice" },
+                    //new QueryArgument<StringGraphType> { Name = "size" },
+                    //new QueryArgument<StringGraphType> { Name = "sizeUnitMeasureCode" },
+                    //new QueryArgument<StringGraphType> { Name = "weightUnitMeasureCode" },
+                    //new QueryArgument<DateTimeGraphType> { Name = "sellStartDate" },
+                    //new QueryArgument<DateTimeGraphType> { Name = "sellEndDate" },
                     new QueryArgument<StringGraphType> { Name = "order" }
                 }),
                 resolve: context =>
@@ -73,7 +73,7 @@ namespace GraphQL_1.GraphQL
                     //var isUserAuthenticated = ((ClaimsIdentity)user.Identity).IsAuthenticated;
 
                     var productId = context.GetArgument<int?>("productId");
-                    var order = context.GetArgument<string>("order");
+                    var order = context.GetArgument<string>("order", null);
 
                     if (productId.HasValue && productId.Value != -411)
                     {

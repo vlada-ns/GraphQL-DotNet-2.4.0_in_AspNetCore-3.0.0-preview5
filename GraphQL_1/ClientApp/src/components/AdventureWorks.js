@@ -1,6 +1,14 @@
 ﻿import React, { Component } from 'react';
-import { SelectionState, PagingState, IntegratedPaging, IntegratedSelection, SortingState } from '@devexpress/dx-react-grid';
-import { Grid, Table, TableHeaderRow, TableSelection, PagingPanel } from '@devexpress/dx-react-grid-bootstrap4';
+import {
+    SearchState, FilteringState, IntegratedFiltering, SortingState, IntegratedSorting, PagingState,
+    IntegratedPaging, SelectionState
+} from '@devexpress/dx-react-grid';
+import {
+    Grid, Table, TableHeaderRow, SearchPanel, PagingPanel, TableFilterRow,
+    Toolbar, TableSelection, ColumnChooser, TableColumnVisibility
+} from '@devexpress/dx-react-grid-bootstrap4';
+
+import mySvg from './aperture.svg'
 
 export class AdventureWorks extends Component {
     static displayName = AdventureWorks.name;
@@ -8,100 +16,82 @@ export class AdventureWorks extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            productId: -411,
+            rows: [],
+            totalCount: 0,
+            queryString: 'graphql?query={products(productId:-411){productId: productId, name, productNumber, makeFlag, color, standardCost, listPrice, size, sellStartDate, sellEndDate }}',
             products: [],
             loading: true,
-            productId: -411,
-            orderBy: "asc",
-            graphqlQuery: ``,   //${this.state.productId=1}
-            selection: []
+            graphqlQuery: ``,
+            selection: [],
+            currentPage: 0,
+            pageSize: 10,
+            pageSizes: [10, 20, 50, 100, 0],
+            defaultHiddenColumnNames: []
         };
 
         this.setProductId = this.setProductId.bind(this);
         this.refreshProducts = this.refreshProducts.bind(this);
-        this.changeSelection = selection => this.setState({ selection });
+        this.changeSelection = this.changeSelection.bind(this);
+
+        this.changeCurrentPage = this.changeCurrentPage.bind(this);
+        this.changePageSize = this.changePageSize.bind(this);
     }
 
     componentDidMount() {
         this.populateWeatherData();
     }
 
-    static renderProductsTable(products, selection) {
-        const tmp3 = Object.keys(products[0])[7]
-        const tmp = Object.keys(products[0])[8]
-        const tmp2 = Object.keys(products[0])[9]
-        return (
-            <Grid
-                rows={products}
-                columns={[
-                    { name: Object.keys(products[0])[0], title: 'ID' },
-                    { name: Object.keys(products[0])[1], title: 'Name' },
-                    { name: Object.keys(products[0])[2], title: 'ProductNumber' },
-                    { name: Object.keys(products[0])[3], title: 'MakeFlag' },
-                    { name: Object.keys(products[0])[4], title: 'Color' },
-                    { name: Object.keys(products[0])[5], title: 'StandardCost' },
-                    { name: Object.keys(products[0])[6], title: 'ListPrice' },
-                    { name: Object.keys(products[0])[7], title: 'Size' },
-                    { name: Object.keys(products[0])[8], title: 'SellStartDate' },
-                    { name: Object.keys(products[0])[9], title: 'SellEndDate' }
-                ]}>
+    //static renderProductsTable(products, defaultHiddenColumnNames) {
+    //    return (
+    //        <Grid
+    //            rows={products}
+    //            columns={Object.keys(products[0]).map(function (key) {
+    //                    return { name: key, title: key }
+    //                })
+    //            }>
 
-                <PagingState
-                    defaultCurrentPage={0}
-                    pageSize={6}
-                />
-                <SelectionState
-                    selection={selection}
-                    onSelectionChange={this.changeSelection}
-                />
-                <IntegratedPaging />
-                <IntegratedSelection />
-                <SortingState />
+    //            <SearchState deafaultValue="" />
+                
+    //            <PagingState defaultCurrentPage={0} pageSize={10} />
+    //            <IntegratedPaging />
 
-                <Table />
-                <TableHeaderRow allowSorting />
-                <TableSelection showSelectAll />
-            </Grid>
+    //            <FilteringState defaultFilters={[]} />
+    //            <IntegratedFiltering />
+                
+    //            <SortingState defaultSorting={[{ columnName: 'productId', direction: 'asc' }]} />
+    //            <IntegratedSorting />
 
-            /*
-            <table className='table table-striped table-bordered table-hover table-sm'>
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">ProductId</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">ProductNumber</th>
-                        <th scope="col">makeFlag</th>
-                        <th scope="col">Color</th>
-                        <th scope="col">standardCost</th>
-                        <th scope="col">listPrice</th>
-                        <th scope="col">size</th>
-                        <th scope="col">sellStartDate</th>
-                        <th scope="col">sellEndDate</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map(product =>
-                        <tr key={product.productId}>
-                            <th scope="row">{product.productId}</th>
-                            <td>{product.name}</td>
-                            <td>{product.productNumber}</td>
-                            <td>{product.makeFlag}</td>
-                            <td>{product.color}</td>
-                            <td>{product.standardCost}</td>
-                            <td>{product.listPrice}</td>
-                            <td>{product.size}</td>
-                            <td>{product.sellStartDate}</td>
-                            <td>{product.sellEndDate}</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-            */
-        );
-    }
+    //            <SelectionState onSelectionChange={this.caller.changeSelection} />  {/* defaultSelection={selection} */}
+
+    //            <Table />
+    //            <TableHeaderRow allowSorting showSortingControls />
+    //            <TableColumnVisibility defaultHiddenColumnNames={defaultHiddenColumnNames} />
+    //            <TableSelection />
+    //            <Toolbar />
+    //            <ColumnChooser />
+    //            <SearchPanel />
+    //            <PagingPanel pageSizes={this.state.pageSizes} />
+    //            <TableFilterRow />
+    //        </Grid>
+    //    );
+    //}
 
     setProductId(event) {
         //const saveValue = event.target.value;
         this.setState({ productId: event.target.value });
+    }
+
+    changeSelection(event) {
+        this.setState({ selection: event.target.value });
+    }
+
+    changeCurrentPage(event) {
+        this.setState({ currentPage: event.target.value });
+    }
+
+    changePageSize(event) {
+        this.setState({ pageSize: event.target.value });
     }
 
     refreshProducts(event) {
@@ -113,29 +103,87 @@ export class AdventureWorks extends Component {
     }
 
     render() {
-        let contents = this.state.loading
-            ? <p><em>Loading...</em></p>
-            : AdventureWorks.renderProductsTable(this.state.products, this.state.selection);
+        //let contents = this.state.loading
+        //    ? <p><em>Loading...</em></p>
+        //    : AdventureWorks.renderProductsTable(this.state.products, this.state.selection, this.state.defaultHiddenColumnNames);
 
+        const products = this.state.products;
+        const { currentPage, pageSizes } = this.state;
+
+        if (this.state.loading) {
+            return(
+                <div>
+                    Loading...
+                </div>)
+        }
         return (
-            <div>
-                <h1>Products</h1>
-                <p>
-                    <p>Search product by Id:
-                    <input type="number" name="productId" onChange={this.setProductId} min={1} max={9999} />
-                        <button onClick={this.refreshProducts}>Search</button>
-                    </p>
-                </p>
-                {contents}
+            //<div>
+            //    <h1>Products</h1>
+            //    <img src={mySvg} alt="aperture" />
+
+            //    <p>
+            //        <p>Search product by Id:
+            //        <input type="number" name="productId" onChange={this.setProductId} min={1} max={9999} />
+            //            <button onClick={this.refreshProducts}>Search</button>
+            //        </p>
+            //    </p>
+            //    {contents}
+            //</div>
+            <div className="card">
+                <img src="..\open-iconic-master\svg\aperture.svg" alt="aperture" />
+                <Grid
+                    rows={products}
+                    columns={Object.keys(products[0]).map(function (key) {
+                        return { name: key, title: key }
+                    })
+                    }>
+
+                    <SearchState deafaultValue={""} />
+
+                    <PagingState defaultCurrentPage={this.state.currentPage} defaultPageSize={this.state.pageSize} />
+                    <IntegratedPaging />
+
+                    <FilteringState defaultFilters={[]} />
+                    <IntegratedFiltering />
+
+                    <SortingState defaultSorting={[{ columnName: 'productId', direction: 'asc' }]} />
+                    <IntegratedSorting />
+
+                    <SelectionState defaultSelection={this.state.selection} onSelectionChange={this.state.changeSelection} />
+
+                    <Table />
+                    <TableHeaderRow allowSorting showSortingControls />
+                    <PagingPanel pageSizes={this.state.pageSizes} />
+                    <TableColumnVisibility defaultHiddenColumnNames={this.state.defaultHiddenColumnNames} />
+                    <TableSelection />
+                    <Toolbar />
+                    <ColumnChooser />
+                    <SearchPanel />
+                    <TableFilterRow />
+                </Grid>
             </div>
         );
     }
 
     async populateWeatherData() {
-        this.state.graphqlQuery = "?query={products(productId:" + this.state.productId + "){productId: productId, name, productNumber, makeFlag, color, standardCost, listPrice, size, sellStartDate, sellEndDate }}"
-        const response = await fetch('graphql' + this.state.graphqlQuery);
-        const data = await response.json();
-        const data2 = data.data.products;
-        this.setState({ products: data2, loading: false });
+        //this.state.graphqlQuery = "?query={products(productId:" + this.state.productId + "){productId: productId, name, productNumber, makeFlag, color, standardCost, listPrice, size, sellStartDate, sellEndDate }}"
+
+        fetch(this.state.queryString)
+            .then(response => response.json())
+            .then(data => data.data)
+            .then(data =>
+                this.setState({
+                    rows: data.products,
+                    totalCount: data.totalCount,
+                    products: data.products,
+                    loading: false
+                })).catch(() => this.setState({ loading: false }));
+        this.state.lastQuery = this.state.queryString;
+
+        ////const response = await fetch('graphql' + this.state.graphqlQuery);
+        //const response = await fetch(this.state.queryString);
+        //const data = await response.json();
+        //const data2 = data.data.products;       //const data2 = data.items;
+        //this.setState({ products: data2, loading: false });
     }
 }
