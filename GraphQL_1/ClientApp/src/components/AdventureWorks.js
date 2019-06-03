@@ -1,14 +1,26 @@
 ﻿import React, { Component } from 'react';
 import {
-    SearchState, FilteringState, IntegratedFiltering, SortingState, IntegratedSorting, PagingState,
-    IntegratedPaging, SelectionState
+    FilteringState,
+    IntegratedFiltering,
+    SortingState,
+    IntegratedSorting,
+    PagingState,
+    IntegratedPaging,
+    SelectionState
 } from '@devexpress/dx-react-grid';
 import {
-    Grid, Table, TableHeaderRow, SearchPanel, PagingPanel, TableFilterRow,
-    Toolbar, TableSelection, ColumnChooser, TableColumnVisibility
+    Grid,
+    Table,
+    TableHeaderRow,
+    PagingPanel,
+    TableFilterRow,
+    Toolbar,
+    TableSelection,
+    ColumnChooser,
+    TableColumnVisibility
 } from '@devexpress/dx-react-grid-bootstrap4';
-
-import mySvg from './aperture.svg'
+import mySvg from '../open-iconic-master/svg/aperture.svg'
+//import { Loading } from '../../../theme-sources/bootstrap4/components/loading';
 
 export class AdventureWorks extends Component {
     static displayName = AdventureWorks.name;
@@ -19,15 +31,14 @@ export class AdventureWorks extends Component {
             productId: -411,
             rows: [],
             totalCount: 0,
-            queryString: 'graphql?query={products(productId:-411){productId: productId, name, productNumber, makeFlag, color, standardCost, listPrice, size, sellStartDate, sellEndDate }}',
-            products: [],
             loading: true,
             graphqlQuery: ``,
             selection: [],
             currentPage: 0,
             pageSize: 10,
             pageSizes: [10, 20, 50, 100, 0],
-            defaultHiddenColumnNames: []
+            defaultHiddenColumnNames: [],
+            lastQuery: ''
         };
 
         this.setProductId = this.setProductId.bind(this);
@@ -39,14 +50,18 @@ export class AdventureWorks extends Component {
     }
 
     componentDidMount() {
-        this.populateWeatherData();
+        this.loadData();
     }
 
-    //static renderProductsTable(products, defaultHiddenColumnNames) {
+    componentDidUpdate() {
+        this.loadData();
+    }
+
+    //static renderProductsTable(rows, defaultHiddenColumnNames) {
     //    return (
     //        <Grid
-    //            rows={products}
-    //            columns={Object.keys(products[0]).map(function (key) {
+    //            rows={rows}
+    //            columns={Object.keys(rows[0]).map(function (key) {
     //                    return { name: key, title: key }
     //                })
     //            }>
@@ -77,8 +92,20 @@ export class AdventureWorks extends Component {
     //    );
     //}
 
+    queryStringMethod() {
+        const { searchValue } = this.state;
+        var qString = '';
+
+        if (searchValue <= 0 || searchValue > 9999) {
+            qString = 'graphql?query={products(productId:-411){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
+        }
+        else{
+            qString = 'graphql?query={products(productId:' + searchValue + '){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
+        }
+        return qString;
+    }
+
     setProductId(event) {
-        //const saveValue = event.target.value;
         this.setState({ productId: event.target.value });
     }
 
@@ -98,29 +125,35 @@ export class AdventureWorks extends Component {
         if (this.state.productId == '') {
             this.state.productId = -411;
         }
-        this.populateWeatherData();
+        this.loadData();
         this.render();
+    }
+
+    changeSearchValue(searchValue) {
+        this.setState({
+            loading: true,
+            searchValue,
+        });
     }
 
     render() {
         //let contents = this.state.loading
         //    ? <p><em>Loading...</em></p>
-        //    : AdventureWorks.renderProductsTable(this.state.products, this.state.selection, this.state.defaultHiddenColumnNames);
+        //    : AdventureWorks.renderProductsTable(this.state.rows, this.state.selection, this.state.defaultHiddenColumnNames);
 
-        const products = this.state.products;
-        const { currentPage, pageSizes } = this.state;
+        const { rows, columns, loading, currentPage, pageSizes, searchValue } = this.state;
 
         if (this.state.loading) {
-            return(
-                <div>
-                    Loading...
+            return (
+                <div className="text-center">
+                    <div className="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>)
         }
         return (
             //<div>
             //    <h1>Products</h1>
-            //    <img src={mySvg} alt="aperture" />
-
             //    <p>
             //        <p>Search product by Id:
             //        <input type="number" name="productId" onChange={this.setProductId} min={1} max={9999} />
@@ -130,16 +163,13 @@ export class AdventureWorks extends Component {
             //    {contents}
             //</div>
             <div className="card">
-                <img src="..\open-iconic-master\svg\aperture.svg" alt="aperture" />
+                <img src={mySvg} alt="aperture" />
                 <Grid
-                    rows={products}
-                    columns={Object.keys(products[0]).map(function (key) {
+                    rows={rows}
+                    columns={Object.keys(rows[0]).map(function (key) {
                         return { name: key, title: key }
                     })
-                    }>
-
-                    <SearchState deafaultValue={""} />
-
+                }>
                     <PagingState defaultCurrentPage={this.state.currentPage} defaultPageSize={this.state.pageSize} />
                     <IntegratedPaging />
 
@@ -158,29 +188,26 @@ export class AdventureWorks extends Component {
                     <TableSelection />
                     <Toolbar />
                     <ColumnChooser />
-                    <SearchPanel />
                     <TableFilterRow />
                 </Grid>
             </div>
         );
     }
 
-    async populateWeatherData() {
-        //this.state.graphqlQuery = "?query={products(productId:" + this.state.productId + "){productId: productId, name, productNumber, makeFlag, color, standardCost, listPrice, size, sellStartDate, sellEndDate }}"
+    async loadData() {
+        const queryString1 = 'graphql?query={products(productId:-411){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
 
-        fetch(this.state.queryString)
+        fetch(queryString1)
             .then(response => response.json())
             .then(data => data.data)
             .then(data =>
                 this.setState({
                     rows: data.products,
                     totalCount: data.totalCount,
-                    products: data.products,
-                    loading: false
+                    loading: false,
                 })).catch(() => this.setState({ loading: false }));
-        this.state.lastQuery = this.state.queryString;
+        this.state.lastQuery = this.state.queryString1;
 
-        ////const response = await fetch('graphql' + this.state.graphqlQuery);
         //const response = await fetch(this.state.queryString);
         //const data = await response.json();
         //const data2 = data.data.products;       //const data2 = data.items;

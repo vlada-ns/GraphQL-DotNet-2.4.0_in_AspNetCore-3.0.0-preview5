@@ -21,7 +21,7 @@ namespace GraphQL_1.GraphQL.Types
             //Field(x => x.ReorderPoint, type: typeof(ShortGraphType));         // Known problem with GraphQl-DotNet and ShortGraphType
             Field(x => x.StandardCost, type: typeof(DecimalGraphType));
             Field(x => x.ListPrice, type: typeof(DecimalGraphType));
-            Field(x => x.Size);
+            Field(x => x.Size, nullable: true);
             Field(x => x.SizeUnitMeasureCode).Description("Property of UnitMeasureType --> InverseProperty");
             Field(x => x.WeightUnitMeasureCode).Description("Property of UnitMeasureType --> InverseProperty");
             Field(x => x.Weight, nullable: true, type: typeof(DecimalGraphType));
