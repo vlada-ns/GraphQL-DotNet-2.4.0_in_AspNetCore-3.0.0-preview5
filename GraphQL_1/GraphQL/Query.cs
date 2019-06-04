@@ -11,14 +11,16 @@ namespace GraphQL_1.GraphQL
     {
         public Query(IEfGraphQLService<AppDbContext> graphQlService) : base(graphQlService)
         {
+            AddQueryField(
+                name: "products",
+                resolve: context => context.DbContext.Product);     // Object reference not set to an instance of an object.
+
             AddSingleField(
                 resolve: context => context.DbContext.Product,
                 name: "product");
-            AddQueryField(
-                name: "products",
-                resolve: context => context.DbContext.Product);
+
             AddQueryConnectionField(
-                name: "products",
+                name: "productsConnection",
                 resolve: context => context.DbContext.Product);
         }
     }

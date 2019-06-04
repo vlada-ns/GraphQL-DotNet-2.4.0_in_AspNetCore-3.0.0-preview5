@@ -11,8 +11,7 @@ namespace GraphQL_1.GraphQL
     {
         public AdventureWorksSchema(IDependencyResolver resolver) : base(resolver)
         {
-            Query = resolver.Resolve<Query>();    //AdventureWorksQuery
-            //Subscription = resolver.Resolve<Subscription>();          // TREBA IMPLEMENTIRATI !!! --> GraphQL.EntityFramework
+            Query = resolver.Resolve<AdventureWorksQuery>();
         }
     }
 }

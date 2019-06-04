@@ -15,13 +15,13 @@ namespace GraphQL_1.GraphQL.Graphs
         {
             Field(x => x.ProductId);
             Field(x => x.Name);
-            AddNavigationListField(
-                name: "productReviews",
-                resolve: context => context.Source.ProductReview);
-            AddNavigationConnectionField(
-                name: "productReviewsConnection",
-                resolve: context => context.Source.ProductReview,
-                includeNames: new[] { "ProductReview" });
+            //AddNavigationListField(
+            //    name: "productReviews",
+            //    resolve: context => context.Source.ProductReview);
+            //AddNavigationConnectionField(
+            //    name: "productReviewsConnection",
+            //    resolve: context => context.Source.ProductReview,
+            //    includeNames: new[] { "ProductReviews" });
         }
     }
 }

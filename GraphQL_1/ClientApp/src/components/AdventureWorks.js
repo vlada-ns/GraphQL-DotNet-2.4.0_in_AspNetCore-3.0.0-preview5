@@ -198,6 +198,7 @@ export class AdventureWorks extends Component {
         const queryString1 = 'graphql?query={products(productId:-411){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
 
         //graphql1?query={products(first:2,after:'2'){productId}}
+        // https://localhost:44385/graphql/graphql1?query={products{productId}}
 
         fetch(queryString1)
             .then(response => response.json())
