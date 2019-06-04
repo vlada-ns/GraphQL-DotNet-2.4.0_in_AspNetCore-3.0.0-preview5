@@ -84,10 +84,6 @@ namespace GraphQL_1
             app.UseGraphQL<AdventureWorksSchema>();     //AdventureWorksSchema   // ISchema
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
 
-            // ********** GraphQL.EntityFramework **********
-            //app.UseWebSockets();
-            //app.UseGraphQLWebSockets<ISchema>();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
