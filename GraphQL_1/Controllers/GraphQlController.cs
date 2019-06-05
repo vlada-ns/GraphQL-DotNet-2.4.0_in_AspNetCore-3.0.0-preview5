@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,14 +13,16 @@ using Newtonsoft.Json.Linq;
 
 namespace GraphQL_1.Controllers
 {
+    #region GraphQlController
     [Route("[controller]")]
     [ApiController]
-    public class GraphQl1Controller : Controller
+    public class GraphQlController :
+        Controller
     {
         IDocumentExecuter executer;
         ISchema schema;
 
-        public GraphQl1Controller(ISchema schema, IDocumentExecuter executer)
+        public GraphQlController(ISchema schema, IDocumentExecuter executer)
         {
             this.schema = schema;
             this.executer = executer;
@@ -104,4 +104,5 @@ namespace GraphQL_1.Controllers
             }
         }
     }
+    #endregion
 }

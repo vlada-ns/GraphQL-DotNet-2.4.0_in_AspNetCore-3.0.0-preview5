@@ -1,16 +1,27 @@
+using GraphiQl;
 using GraphQL;
+using GraphQL.EntityFramework;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
+using GraphQL.Types;
+using GraphQL.Utilities;
 using GraphQL_1.Data;
 using GraphQL_1.GraphQL;
+using GraphQL_1.Models;
 using GraphQL_1.Repository;
+using GraphQL_1.SimonCropp;
+using GraphQL_1.SimonCropp.Graphs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GraphQL_1
 {
@@ -35,32 +46,87 @@ namespace GraphQL_1
                 configuration.RootPath = "ClientApp/build";
             });
 
+            // ################################################
+            // ************** SimonCropp - start **************
+            // ################################################
+            GraphTypeTypeRegistry.Register<Product, ProductGraph>();
+
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db")));
+
+            var builder = new DbContextOptionsBuilder();
+            builder.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db"));
+            using (var myDataContext = new AppDbContext(builder.Options))
+            {
+                EfGraphQLConventions.RegisterInContainer(
+                    services,
+                    myDataContext,
+                    userContext => (AppDbContext)userContext
+                );
+            }
+
+            foreach (var type in GetGraphQlTypes())
+            {
+                services.AddSingleton(type);
+            }
+
+            //services.AddGraphQL(options => options.ExposeExceptions = true).AddWebSockets();
+            services.AddSingleton<ContextFactory>();
+            services.AddSingleton<IDocumentExecuter, EfDocumentExecuter>();
+            services.AddScoped<IDependencyResolver>(
+                provider => new FuncDependencyResolver(provider.GetRequiredService));
+            services.AddScoped<ISchema, SimonCropp.Schema>();        // AddSingleton
+            var mvc = services.AddMvc();
+            mvc.SetCompatibilityVersion(CompatibilityVersion.Latest);
+            // ##############################################
+            // ************** SimonCropp - end **************
+            // ##############################################
+
+
+
             // #############################################
             // ************** GraphQL - start **************
             // #############################################
+
             services.Configure<IISServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
             });
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db")));
+
+
+            // STAVIO SAM U KOMENTAR POSTO GA KORISTIM U OKVIRU SimonCropp
+            //services.AddDbContextPool<AppDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db")));
             services.AddTransient<ProductRepository>();     // AddScoped
             services.AddTransient<ProductSubcategoryRepository>();
             //******< GraphQL Services >******
-            services.AddScoped<IDependencyResolver>(provider =>
-                new FuncDependencyResolver(provider.GetRequiredService));
+
+
+            // STAVIO SAM U KOMENTAR POSTO GA KORISTIM U OKVIRU SimonCropp
+            //services.AddScoped<IDependencyResolver>(provider =>
+            //    new FuncDependencyResolver(provider.GetRequiredService));
+
             services.AddScoped<AdventureWorksSchema>();
+
             services.AddGraphQL(options =>
             {
                 options.EnableMetrics = true;
                 options.ExposeExceptions = true; //set true only in dev mode. // options.ExposeExceptions = this.Environment.IsDevelopment();
             })
-                .AddGraphTypes(ServiceLifetime.Scoped)
-                //.AddUserContextBuilder(httpContext => httpContext.User)
+                .AddGraphTypes(ServiceLifetime.Scoped)  //.AddUserContextBuilder(httpContext => httpContext.User)
                 .AddDataLoader();
             // ###########################################
             // ************** GraphQL - end **************
             // ###########################################
+        }
+
+        static IEnumerable<Type> GetGraphQlTypes()
+        {
+            return typeof(Startup).Assembly
+                .GetTypes()
+                .Where(x => !x.IsAbstract &&
+                            (typeof(IObjectGraphType).IsAssignableFrom(x) ||
+                             typeof(IInputObjectGraphType).IsAssignableFrom(x)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,8 +147,9 @@ namespace GraphQL_1
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseGraphQL<AdventureWorksSchema>();     //AdventureWorksSchema   // ISchema
+            app.UseGraphQL<ISchema>("/ql");     //AdventureWorksSchema   // ISchema
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //to explorer API navigate https://*DOMAIN*/ui/playground
+            app.UseGraphiQl("/graphiql", "/graphql");
 
             app.UseMvc(routes =>
             {
