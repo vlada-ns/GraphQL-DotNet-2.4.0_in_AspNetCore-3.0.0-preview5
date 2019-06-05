@@ -4,6 +4,7 @@ using GraphQL.EntityFramework;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
+using GraphQL.Types.Relay;
 using GraphQL.Utilities;
 using GraphQL_1.Data;
 using GraphQL_1.GraphQL;
@@ -50,6 +51,10 @@ namespace GraphQL_1
             // ************** SimonCropp - start **************
             // ################################################
             GraphTypeTypeRegistry.Register<Product, ProductGraph>();
+            GraphTypeTypeRegistry.Register<ProductReview, ProductReviewGraph>();
+            GraphTypeTypeRegistry.Register<ProductCategory, ProductCategoryGraph>();
+            GraphTypeTypeRegistry.Register<ProductSubcategory, ProductSubcategoryGraph>();
+            GraphTypeTypeRegistry.Register<TransactionHistory, TransactionHistoryGraph>();
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db")));
@@ -78,6 +83,12 @@ namespace GraphQL_1
             services.AddScoped<ISchema, SimonCropp.Schema>();        // AddSingleton
             var mvc = services.AddMvc();
             mvc.SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+            // Connection Types - GraphQL enables paging via Connections
+            //services.AddTransient(typeof(ConnectionType<>));
+            //services.AddTransient(typeof(EdgeType<>));
+            //services.AddTransient<PageInfoType>();
+            EfGraphQLConventions.RegisterConnectionTypesInContainer(services);
             // ##############################################
             // ************** SimonCropp - end **************
             // ##############################################

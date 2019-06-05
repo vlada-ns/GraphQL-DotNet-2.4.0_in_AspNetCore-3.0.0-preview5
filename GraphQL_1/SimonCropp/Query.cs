@@ -13,6 +13,9 @@ namespace GraphQL_1.SimonCropp
         public Query(IEfGraphQLService<AppDbContext> efGraphQlService) :
             base(efGraphQlService)
         {
+            // ###################
+            // Product
+            // ###################
             AddQueryField(
                 name: "products",
                 resolve: context => context.DbContext.Product);
@@ -27,28 +30,106 @@ namespace GraphQL_1.SimonCropp
                 name: "productsConnection",
                 resolve: context => context.DbContext.Product);
 
-            //AddQueryField(
-            //    name: "employees",
-            //    resolve: context => context.DbContext.Employees);
+            // ###################
+            // ProductReview
+            // ###################
+            AddQueryField(
+                name: "productReviews",
+                resolve: context => context.DbContext.ProductReview);
 
-            //AddQueryField(
-            //    name: "employeesByArgument",
-            //    resolve: context =>
-            //    {
-            //        var content = context.GetArgument<string>("content");
-            //        return context.DbContext.Employees.Where(x => x.Content == content);
-            //    },
-            //    arguments: new QueryArguments(
-            //        new QueryArgument<StringGraphType>
-            //        {
-            //            Name = "content"
-            //        }));
+            AddQueryField(
+                name: "productReviewsByArgument",
+                resolve: context =>
+                {
+                    var content = context.GetArgument<string>("reviewerName");
+                    return context.DbContext.ProductReview.Where(x => x.ReviewerName == content);
+                },
+                arguments: new QueryArguments(
+                    new QueryArgument<StringGraphType>
+                    {
+                        Name = "reviewerName"
+                    }));
 
-            //AddQueryConnectionField(
-            //    name: "employeesConnection",
-            //    resolve: context => context.DbContext.Employees);
+            AddQueryConnectionField(
+                name: "productReviewsConnection",
+                resolve: context => context.DbContext.ProductReview);
 
-            //#region ManuallyApplyWhere
+            // ###################
+            // ProductCategory
+            // ###################
+            AddQueryField(
+                name: "productCategories",
+                resolve: context => context.DbContext.ProductCategory);
+
+            AddQueryField(
+                name: "productCategoriesByArgument",
+                resolve: context =>
+                {
+                    var content = context.GetArgument<string>("name");
+                    return context.DbContext.ProductCategory.Where(x => x.Name == content);
+                },
+                arguments: new QueryArguments(
+                    new QueryArgument<StringGraphType>
+                    {
+                        Name = "name"
+                    }));
+
+            AddQueryConnectionField(
+                name: "productCategoriesConnection",
+                resolve: context => context.DbContext.ProductCategory);
+
+            // ###################
+            // ProductSubcategory
+            // ###################
+            AddQueryField(
+                name: "productSubcategories",
+                resolve: context => context.DbContext.ProductSubcategory);
+
+            AddQueryField(
+                name: "productSubcategoriesByArgument",
+                resolve: context =>
+                {
+                    var content = context.GetArgument<string>("name");
+                    return context.DbContext.ProductSubcategory.Where(x => x.Name == content);
+                },
+                arguments: new QueryArguments(
+                    new QueryArgument<StringGraphType>
+                    {
+                        Name = "name"
+                    }));
+
+            AddQueryConnectionField(
+                name: "productSubcategoriesConnection",
+                resolve: context => context.DbContext.ProductSubcategory);
+
+            // ###################
+            // TransactionHistory
+            // ###################
+            AddQueryField(
+                name: "transactionHistories",
+                resolve: context => context.DbContext.TransactionHistory);
+
+            AddQueryField(
+                name: "transactionHistoriesByArgument",
+                resolve: context =>
+                {
+                    var content = context.GetArgument<int>("transactionId");
+                    return context.DbContext.TransactionHistory.Where(x => x.TransactionId == content);
+                },
+                arguments: new QueryArguments(
+                    new QueryArgument<IdGraphType>
+                    {
+                        Name = "transactionId"
+                    }));
+
+            AddQueryConnectionField(
+                name: "transactionHistoriesConnection",
+                resolve: context => context.DbContext.TransactionHistory);
+
+            // **********************************************************************************************
+            // ManuallyApplyWhere NOT IMPLEMENTED --> ORIGINAL FROM --> SimonCropp / GraphQL.EntityFramework
+            // **********************************************************************************************
+            #region ManuallyApplyWhere
 
             //Field<ListGraphType<EmployeeSummaryGraph>>(
             //    name: "employeeSummary",
@@ -83,7 +164,7 @@ namespace GraphQL_1.SimonCropp
             //               };
             //    });
 
-            //#endregion
+            #endregion
         }
     }
 }
