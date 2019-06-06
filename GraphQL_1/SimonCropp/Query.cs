@@ -143,6 +143,35 @@ namespace GraphQL_1.SimonCropp
                 name: "transactionHistoriesConnection",
                 resolve: context => context.DbContext.TransactionHistory);
 
+            // ###################
+            // Student
+            // ###################
+            AddQueryField(
+                name: "students",
+                resolve: context => context.DbContext.Students);
+
+            // ###################
+            // Grade
+            // ###################
+            AddQueryField(
+                name: "grades",
+                resolve: context => context.DbContext.Grades);
+
+            // ###################
+            // House
+            // ###################
+            AddQueryField(
+                name: "houses",
+                resolve: context => context.DbContext.House);
+
+            // ###################
+            // Window
+            // ###################
+            AddQueryField(
+                name: "windows",
+                resolve: context => context.DbContext.Window);
+
+
             // **********************************************************************************************
             // ManuallyApplyWhere NOT IMPLEMENTED --> ORIGINAL FROM --> SimonCropp / GraphQL.EntityFramework
             // **********************************************************************************************

@@ -55,6 +55,10 @@ namespace GraphQL_1
             GraphTypeTypeRegistry.Register<ProductCategory, ProductCategoryGraph>();
             GraphTypeTypeRegistry.Register<ProductSubcategory, ProductSubcategoryGraph>();
             GraphTypeTypeRegistry.Register<TransactionHistory, TransactionHistoryGraph>();
+            GraphTypeTypeRegistry.Register<Grade, GradeGraph>();
+            GraphTypeTypeRegistry.Register<Student, StudentGraph>();
+            GraphTypeTypeRegistry.Register<House, HouseGraph>();
+            GraphTypeTypeRegistry.Register<Window, WindowGraph>();
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("GraphQL_1Db")));

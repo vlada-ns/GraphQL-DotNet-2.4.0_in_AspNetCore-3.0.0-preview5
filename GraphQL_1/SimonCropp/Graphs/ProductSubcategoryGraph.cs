@@ -16,10 +16,10 @@ namespace GraphQL_1.SimonCropp.Graphs
             Field(x => x.Rowguid, type: typeof(IdGraphType)).Description("Rowguid of the ProductSubcategory");
             Field(x => x.ModifiedDate).Description("ModifiedDate of ProductSubcategory");
             AddNavigationListField(
-                name: "products",
+                name: "product",
                 resolve: context => context.Source.Product);
             AddNavigationConnectionField(
-                name: "productsConnection",
+                name: "productConnection",
                 resolve: context => context.Source.Product,
                 includeNames: new[] { "Product" });
             AddNavigationField(

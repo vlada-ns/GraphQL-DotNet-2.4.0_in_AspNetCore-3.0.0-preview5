@@ -4,14 +4,16 @@ using GraphQL_1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GraphQL_1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190606105514_added_Student_and_Grade_classes_for_secound_time")]
+    partial class added_Student_and_Grade_classes_for_secound_time
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1109,113 +1111,6 @@ namespace GraphQL_1.Migrations
                     b.HasKey("GradeId");
 
                     b.ToTable("Grades");
-
-                    b.HasData(
-                        new
-                        {
-                            GradeId = 1,
-                            GradeName = "Matematika"
-                        },
-                        new
-                        {
-                            GradeId = 2,
-                            GradeName = "Srpski"
-                        },
-                        new
-                        {
-                            GradeId = 3,
-                            GradeName = "Likovno"
-                        },
-                        new
-                        {
-                            GradeId = 4,
-                            GradeName = "Geografija"
-                        },
-                        new
-                        {
-                            GradeId = 5,
-                            GradeName = "Fizika"
-                        },
-                        new
-                        {
-                            GradeId = 6,
-                            GradeName = "Fizicko"
-                        },
-                        new
-                        {
-                            GradeId = 7,
-                            GradeName = "Muzicko"
-                        },
-                        new
-                        {
-                            GradeId = 8,
-                            GradeName = "Informatika"
-                        });
-                });
-
-            modelBuilder.Entity("GraphQL_1.Models.House", b =>
-                {
-                    b.Property<int>("HouseId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("HouseId");
-
-                    b.ToTable("House");
-
-                    b.HasData(
-                        new
-                        {
-                            HouseId = 1,
-                            Name = "HouseName1"
-                        },
-                        new
-                        {
-                            HouseId = 2,
-                            Name = "HouseName2"
-                        },
-                        new
-                        {
-                            HouseId = 3,
-                            Name = "HouseName3"
-                        },
-                        new
-                        {
-                            HouseId = 4,
-                            Name = "HouseName4"
-                        },
-                        new
-                        {
-                            HouseId = 5,
-                            Name = "HouseName5"
-                        },
-                        new
-                        {
-                            HouseId = 6,
-                            Name = "HouseName6"
-                        },
-                        new
-                        {
-                            HouseId = 7,
-                            Name = "HouseName7"
-                        },
-                        new
-                        {
-                            HouseId = 8,
-                            Name = "HouseName8"
-                        },
-                        new
-                        {
-                            HouseId = 9,
-                            Name = "HouseName9"
-                        },
-                        new
-                        {
-                            HouseId = 10,
-                            Name = "HouseName10"
-                        });
                 });
 
             modelBuilder.Entity("GraphQL_1.Models.Illustration", b =>
@@ -3770,68 +3665,6 @@ namespace GraphQL_1.Migrations
                     b.HasIndex("GradeId");
 
                     b.ToTable("Students");
-
-                    b.HasData(
-                        new
-                        {
-                            StudentId = 1,
-                            GradeId = 1,
-                            Name = "Nikola"
-                        },
-                        new
-                        {
-                            StudentId = 2,
-                            GradeId = 2,
-                            Name = "Vladimir"
-                        },
-                        new
-                        {
-                            StudentId = 3,
-                            GradeId = 2,
-                            Name = "Dario"
-                        },
-                        new
-                        {
-                            StudentId = 4,
-                            GradeId = 3,
-                            Name = "Srdjan"
-                        },
-                        new
-                        {
-                            StudentId = 5,
-                            GradeId = 3,
-                            Name = "Boris"
-                        },
-                        new
-                        {
-                            StudentId = 6,
-                            GradeId = 3,
-                            Name = "Milan"
-                        },
-                        new
-                        {
-                            StudentId = 7,
-                            GradeId = 4,
-                            Name = "Milena"
-                        },
-                        new
-                        {
-                            StudentId = 8,
-                            GradeId = 4,
-                            Name = "Milica"
-                        },
-                        new
-                        {
-                            StudentId = 9,
-                            GradeId = 4,
-                            Name = "Jelena"
-                        },
-                        new
-                        {
-                            StudentId = 10,
-                            GradeId = 4,
-                            Name = "Sonja"
-                        });
                 });
 
             modelBuilder.Entity("GraphQL_1.Models.TrackingEvent", b =>
@@ -4004,73 +3837,6 @@ namespace GraphQL_1.Migrations
                         .HasName("AK_Vendor_AccountNumber");
 
                     b.ToTable("Vendor","Purchasing");
-                });
-
-            modelBuilder.Entity("GraphQL_1.Models.Window", b =>
-                {
-                    b.Property<int>("WindowId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("HouseId");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("WindowId");
-
-                    b.HasIndex("HouseId");
-
-                    b.ToTable("Window");
-
-                    b.HasData(
-                        new
-                        {
-                            WindowId = 1,
-                            HouseId = 1,
-                            Name = "WindowName1"
-                        },
-                        new
-                        {
-                            WindowId = 2,
-                            HouseId = 2,
-                            Name = "WindowName2"
-                        },
-                        new
-                        {
-                            WindowId = 3,
-                            HouseId = 2,
-                            Name = "WindowName3"
-                        },
-                        new
-                        {
-                            WindowId = 4,
-                            HouseId = 3,
-                            Name = "WindowName4"
-                        },
-                        new
-                        {
-                            WindowId = 5,
-                            HouseId = 3,
-                            Name = "WindowName5"
-                        },
-                        new
-                        {
-                            WindowId = 6,
-                            HouseId = 3,
-                            Name = "WindowName6"
-                        },
-                        new
-                        {
-                            WindowId = 7,
-                            HouseId = 4,
-                            Name = "WindowName7"
-                        },
-                        new
-                        {
-                            WindowId = 8,
-                            HouseId = 4,
-                            Name = "WindowName8"
-                        });
                 });
 
             modelBuilder.Entity("GraphQL_1.Models.WorkOrder", b =>
@@ -4730,14 +4496,6 @@ namespace GraphQL_1.Migrations
                     b.HasOne("GraphQL_1.Models.BusinessEntity", "BusinessEntity")
                         .WithOne("Vendor")
                         .HasForeignKey("GraphQL_1.Models.Vendor", "BusinessEntityId");
-                });
-
-            modelBuilder.Entity("GraphQL_1.Models.Window", b =>
-                {
-                    b.HasOne("GraphQL_1.Models.House", "House")
-                        .WithMany("Windows")
-                        .HasForeignKey("HouseId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("GraphQL_1.Models.WorkOrder", b =>

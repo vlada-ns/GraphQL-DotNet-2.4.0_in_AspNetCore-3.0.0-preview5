@@ -4,14 +4,16 @@ using GraphQL_1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GraphQL_1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190606114958_myMigration1")]
+    partial class myMigration1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4735,7 +4737,7 @@ namespace GraphQL_1.Migrations
             modelBuilder.Entity("GraphQL_1.Models.Window", b =>
                 {
                     b.HasOne("GraphQL_1.Models.House", "House")
-                        .WithMany("Windows")
+                        .WithMany("Window")
                         .HasForeignKey("HouseId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

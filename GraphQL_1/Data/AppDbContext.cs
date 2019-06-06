@@ -21,8 +21,12 @@ namespace GraphQL_1.Data
         {
         }
 
+        //entities
         public DbSet<Student> Students { get; set; }
         public DbSet<Grade> Grades { get; set; }
+
+        public DbSet<Window> Window { get; set; }
+        public DbSet<House> House { get; set; }
 
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<AddressType> AddressType { get; set; }
@@ -137,6 +141,54 @@ namespace GraphQL_1.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+
+            modelBuilder.Entity<Student>().HasData(
+                new Student() { StudentId = 1, Name = "Nikola", GradeId = 1 },
+                new Student() { StudentId = 2, Name = "Vladimir", GradeId = 2 },
+                new Student() { StudentId = 3, Name = "Dario", GradeId = 2 },
+                new Student() { StudentId = 4, Name = "Srdjan", GradeId = 3 },
+                new Student() { StudentId = 5, Name = "Boris", GradeId = 3 },
+                new Student() { StudentId = 6, Name = "Milan", GradeId = 3 },
+                new Student() { StudentId = 7, Name = "Milena", GradeId = 4 },
+                new Student() { StudentId = 8, Name = "Milica", GradeId = 4 },
+                new Student() { StudentId = 9, Name = "Jelena", GradeId = 4 },
+                new Student() { StudentId = 10, Name = "Sonja", GradeId = 4 }
+                );
+
+            modelBuilder.Entity<Grade>().HasData(
+                new Grade() { GradeId = 1, GradeName = "Matematika" },
+                new Grade() { GradeId = 2, GradeName = "Srpski" },
+                new Grade() { GradeId = 3, GradeName = "Likovno" },
+                new Grade() { GradeId = 4, GradeName = "Geografija" },
+                new Grade() { GradeId = 5, GradeName = "Fizika" },
+                new Grade() { GradeId = 6, GradeName = "Fizicko" },
+                new Grade() { GradeId = 7, GradeName = "Muzicko" },
+                new Grade() { GradeId = 8, GradeName = "Informatika" }
+                );
+
+            modelBuilder.Entity<Window>().HasData(
+               new Window() { WindowId = 1, Name = "WindowName1", HouseId = 1 },
+               new Window() { WindowId = 2, Name = "WindowName2", HouseId = 2 },
+               new Window() { WindowId = 3, Name = "WindowName3", HouseId = 2 },
+               new Window() { WindowId = 4, Name = "WindowName4", HouseId = 3 },
+               new Window() { WindowId = 5, Name = "WindowName5", HouseId = 3 },
+               new Window() { WindowId = 6, Name = "WindowName6", HouseId = 3 },
+               new Window() { WindowId = 7, Name = "WindowName7", HouseId = 4 },
+               new Window() { WindowId = 8, Name = "WindowName8", HouseId = 4 }
+               );
+
+            modelBuilder.Entity<House>().HasData(
+               new House() { HouseId = 1, Name = "HouseName1" },
+               new House() { HouseId = 2, Name = "HouseName2" },
+               new House() { HouseId = 3, Name = "HouseName3" },
+               new House() { HouseId = 4, Name = "HouseName4" },
+               new House() { HouseId = 5, Name = "HouseName5" },
+               new House() { HouseId = 6, Name = "HouseName6" },
+               new House() { HouseId = 7, Name = "HouseName7" },
+               new House() { HouseId = 8, Name = "HouseName8" },
+               new House() { HouseId = 9, Name = "HouseName9" },
+               new House() { HouseId = 10, Name = "HouseName10" }
+               );
 
             modelBuilder.Entity<Address>(entity =>
             {

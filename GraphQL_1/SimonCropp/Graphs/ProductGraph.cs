@@ -35,17 +35,17 @@ namespace GraphQL_1.SimonCropp.Graphs
             Field(x => x.Rowguid, type: typeof(IdGraphType));
             Field(x => x.ModifiedDate);
             AddNavigationListField(
-                name: "productReviews",
+                name: "productReview",
                 resolve: context => context.Source.ProductReview);
             AddNavigationConnectionField(
-                name: "productReviewsConnection",
+                name: "productReviewConnection",
                 resolve: context => context.Source.ProductReview,
                 includeNames: new[] { "ProductReview" });
             AddNavigationListField(
-                name: "transactionHistories",
+                name: "transactionHistory",
                 resolve: context => context.Source.TransactionHistory);
             AddNavigationConnectionField(
-                name: "transactionHistoriesConnection",
+                name: "transactionHistoryConnection",
                 resolve: context => context.Source.TransactionHistory,
                 includeNames: new[] { "TransactionHistory" });
             AddNavigationField(
