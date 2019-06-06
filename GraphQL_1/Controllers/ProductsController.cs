@@ -39,6 +39,17 @@ namespace GraphQL_1.Controllers
         //}
 
         [HttpGet("[action]")]
+        public IQueryable<Product> Test()
+        {
+            var orderBy = "asc";
+            var productId = -411;
+            var products1 = _productRepository.GetAll(orderBy, productId);   // WORK
+            //var products = _productRepository.GetProductsAsync();
+            //var res = products.Result;
+            return products1;
+        }
+
+        [HttpGet("[action]")]
         public IQueryable<Product> List(string orderBy, int productId = -1)
         {
             var products1 = _productRepository.GetAll(orderBy, productId);   // WORK

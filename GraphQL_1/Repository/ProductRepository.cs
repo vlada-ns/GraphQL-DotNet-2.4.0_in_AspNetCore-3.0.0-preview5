@@ -31,6 +31,8 @@ namespace GraphQL_1.Repository
         }
         public IQueryable<Product> GetAll(string orderBy = "", int id = -411)
         {
+
+            //var a = _db.Product.Include(x => x.ProductReview);
             if (id == -411)
             {
                 //return _db.Product.Include(x=>x.TransactionHistory).ToList();

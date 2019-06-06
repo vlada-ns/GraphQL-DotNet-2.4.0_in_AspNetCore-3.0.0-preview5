@@ -48,15 +48,16 @@ namespace GraphQL_1.SimonCropp.Graphs
                 name: "transactionHistoriesConnection",
                 resolve: context => context.Source.TransactionHistory,
                 includeNames: new[] { "TransactionHistory" });
+            AddNavigationField(
+                name: "ProductSubcategory",
+                resolve: context => context.Source.ProductSubcategory);
 
             // ###############
-            // Original Types from first project (GraphQL)
+            // Original Types from GraphQL for .NET
             // ###############
-            //Field<ProductSubcategoryType>(nameof(Product.ProductSubcategory)/*, nullable: true*/);
             ////Field<ProductModelType>(nameof(Product.ProductModel)/*, nullable: true*/);
             ////Field<UnitMeasureType>(nameof(Product.SizeUnitMeasureCode)/*, nullable: true*/);
             ////Field<UnitMeasureType>(nameof(Product.WeightUnitMeasureCode)/*, nullable: true*/);
-            //Field<ListGraphType<ProductReviewType>>(nameof(Product.ProductReview));
             
         }
     }

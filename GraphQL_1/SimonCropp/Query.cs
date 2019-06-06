@@ -30,11 +30,32 @@ namespace GraphQL_1.SimonCropp
                 name: "productsConnection",
                 resolve: context => context.DbContext.Product);
 
+            AddQueryField(
+                name: "productsByArgument",
+                resolve: context =>
+                {
+                    var content = context.GetArgument<string>("color");
+                    return context.DbContext.Product.Where(x => x.Color == content);
+                },
+                arguments: new QueryArguments(
+                    new QueryArgument<StringGraphType>
+                    {
+                        Name = "color"
+                    }));
+
             // ###################
             // ProductReview
             // ###################
             AddQueryField(
                 name: "productReviews",
+                resolve: context => context.DbContext.ProductReview);
+
+            AddSingleField(
+                resolve: context => context.DbContext.ProductReview,
+                name: "productReview");
+
+            AddQueryConnectionField(
+                name: "productReviewsConnection",
                 resolve: context => context.DbContext.ProductReview);
 
             AddQueryField(
@@ -49,10 +70,6 @@ namespace GraphQL_1.SimonCropp
                     {
                         Name = "reviewerName"
                     }));
-
-            AddQueryConnectionField(
-                name: "productReviewsConnection",
-                resolve: context => context.DbContext.ProductReview);
 
             // ###################
             // ProductCategory

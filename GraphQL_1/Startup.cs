@@ -68,6 +68,9 @@ namespace GraphQL_1
                     myDataContext,
                     userContext => (AppDbContext)userContext
                 );
+
+                //var x = new ProductRepository(myDataContext);
+                //var x1 = x.GetAll();
             }
 
             foreach (var type in GetGraphQlTypes())
