@@ -15,6 +15,10 @@ namespace GraphQL_1.SimonCropp.Graphs
             AddNavigationListField(
                 name: "windows",
                 resolve: context => context.Source.Windows);
+            AddNavigationConnectionField(
+                name: "windowsConnection",
+                resolve: context => context.Source.Windows,
+                includeNames: new[] { "Windows" });
         }
     }
 }
