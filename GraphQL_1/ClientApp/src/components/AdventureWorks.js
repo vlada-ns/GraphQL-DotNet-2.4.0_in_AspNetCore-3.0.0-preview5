@@ -32,16 +32,23 @@ export class AdventureWorks extends Component {
             rows: [],
             totalCount: 0,
             loading: true,
-            graphqlQuery: ``,
+            queryString: ``,
             selection: [],
             currentPage: 0,
             pageSize: 10,
             pageSizes: [10, 20, 50, 100, 0],
             defaultHiddenColumnNames: [],
-            lastQuery: ''
+            lastQuery: '',
+            prevProps: {
+                totalCount: 0,
+                queryString: ``,
+                selection: [],
+                currentPage: 0,
+                pageSize: 10,
+            }
         };
 
-        this.setProductId = this.setProductId.bind(this);
+        //this.setProductId = this.setProductId.bind(this);
         this.refreshProducts = this.refreshProducts.bind(this);
         this.changeSelection = this.changeSelection.bind(this);
 
@@ -53,8 +60,28 @@ export class AdventureWorks extends Component {
         this.loadData();
     }
 
-    componentDidUpdate() {
-        this.loadData();
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const { currentPage, pageSize } = this.state;
+
+        var tmp01 = prevProps;
+        var tmp02 = prevState;
+        var tmp03 = snapshot;
+
+        var tmp1 = currentPage;
+        var tmp2 = prevState.currentPage;
+
+        var stopDebug = currentPage;
+
+        if (currentPage != prevState.currentPage
+            || pageSize != prevState.pageSize
+        ) {
+            //if (prevState.currentPage > currentPage) {
+            //    this.state.currentPage = currentPage;
+            //}
+
+            this.queryString2()
+            this.loadData();
+        }
     }
 
     //static renderProductsTable(rows, defaultHiddenColumnNames) {
@@ -92,22 +119,55 @@ export class AdventureWorks extends Component {
     //    );
     //}
 
-    queryStringMethod() {
-        const { searchValue } = this.state;
-        var qString = '';
+    //renderProductsTable() {
+    //    return (
+    //        <div className="card">
+    //            <img src={mySvg} alt="aperture" />
+    //            <Grid
+    //                rows={rows}
+    //                columns={Object.keys(rows[0]).map(function (key) {
+    //                    return { name: key, title: key }
+    //                })
+    //                }>
+    //                <PagingState d defaultCurrentPage={this.state.currentPage} defaultPageSize={this.state.pageSize} onCurrentPageChange={this.changeCurrentPage} onPageSizeChange={this.changePageSize} />
+    //                <CustomPaging totalCount={totalCount} />
 
-        if (searchValue <= 0 || searchValue > 9999) {
-            qString = 'graphql?query={products(productId:-411){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
-        }
-        else{
-            qString = 'graphql?query={products(productId:' + searchValue + '){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
-        }
-        return qString;
-    }
+    //                <FilteringState defaultFilters={[]} />
+    //                <IntegratedFiltering />
 
-    setProductId(event) {
-        this.setState({ productId: event.target.value });
-    }
+    //                <SortingState defaultSorting={[{ columnName: 'productId', direction: 'asc' }]} />
+    //                <IntegratedSorting />
+
+    //                <SelectionState defaultSelection={this.state.selection} onSelectionChange={this.state.changeSelection} />
+
+    //                <Table />
+    //                <TableHeaderRow allowSorting showSortingControls />
+    //                <PagingPanel pageSizes={this.state.pageSizes} />
+    //                <TableColumnVisibility defaultHiddenColumnNames={this.state.defaultHiddenColumnNames} />
+    //                <TableSelection />
+    //                <Toolbar />
+    //                <ColumnChooser />
+    //                <TableFilterRow />
+    //            </Grid>
+    //        </div>
+    //    );
+    //}
+
+    //queryStringMethod() {
+    //    const { searchValue } = this.state;
+    //    var qString = '';
+
+    //    if (searchValue <= 0 || searchValue > 9999) {
+    //        searchValue = -411;
+    //    }
+    //    qString = 'graphql?query={products(productId:' + searchValue + '){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
+
+    //    return qString;
+    //}
+
+    //setProductId(event) {
+    //    this.setState({ productId: event.target.value });
+    //}
 
     changeSelection(event) {
         this.setState({ selection: event.target.value });
@@ -117,31 +177,65 @@ export class AdventureWorks extends Component {
     //    this.setState({ currentPage: event.target.value });
     //}
     changeCurrentPage(currentPage) {
+
+        var tmp1 = currentPage;
+
+
+
         this.setState({
             loading: true,
             currentPage,
         });
+
+        var tmp2 = currentPage;
     }
 
     queryString2() {
-        let { pageSize, currentPage } = this.state;
+        let { pageSize, currentPage, totalCount } = this.state;
+        let qString = '';
+        let after = pageSize * currentPage;
 
         //return `${URL}?take=${pageSize}&skip=${pageSize * currentPage}`;
         if (pageSize == 0) {
-            pageSize = this.state.totalCount;
+            pageSize = totalCount;
         }
-        return `graphql?query={productsConnection(first:${pageSize},after:"${pageSize * currentPage}"){totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{startCursor,endCursor,hasPreviousPage,hasNextPage}}}`;
 
+        if (pageSize * currentPage >= totalCount) {
+            after = totalCount - pageSize;
+            if (after < 0) {
+                after = 0;
+            }
+        }
+
+        qString = `graphql?query={productsConnection(first:${pageSize},after:"${after}"){totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{startCursor,endCursor,hasPreviousPage,hasNextPage}}}`;
+
+        var stopDebug = pageSize;
+
+        this.setState({ queryString: qString });
+        return qString;
         //'graphql?query={productsConnection(first:10,after:"0"){totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{startCursor,endCursor,hasPreviousPage,hasNextPage}}}'
     }
 
-    //changePageSize(event) {
-    //    this.setState({ pageSize: event.target.value });
-    //}
     changePageSize(pageSize) {
+        var { currentPage, totalCount } = this.state;
+        var tmpCurrentPage = currentPage;
+
         if (pageSize == 0) {
-            this.setState({ pageSize: this.state.totalCount })
+            this.setState({ pageSize: totalCount })      //this.state.totalCount
         }
+
+        var numberOfPages = Math.ceil( (totalCount / pageSize) - 1 );
+
+        if (numberOfPages < currentPage) {
+            this.setState({ currentPage: numberOfPages });
+            tmpCurrentPage = numberOfPages;
+        }
+
+        var tmp2 = this.state.currentPage;
+        this.state.currentPage = numberOfPages;
+        var stopDebug = totalCount;
+
+        this.setState({ currentPage: tmpCurrentPage });
         this.setState({ pageSize });
     }
 
@@ -161,11 +255,11 @@ export class AdventureWorks extends Component {
     }
 
     render() {
+        const { rows, totalCount, columns, loading, currentPage, pageSizes, searchValue } = this.state;
+
         //let contents = this.state.loading
         //    ? <p><em>Loading...</em></p>
-        //    : AdventureWorks.renderProductsTable(this.state.rows, this.state.selection, this.state.defaultHiddenColumnNames);
-
-        const { rows, totalCount, columns, loading, currentPage, pageSizes, searchValue } = this.state;
+        //    : AdventureWorks.renderProductsTable(rows, totalCount/*, this.state.selection, this.state.defaultHiddenColumnNames*/);
 
         if (this.state.loading) {
             return (
@@ -176,16 +270,18 @@ export class AdventureWorks extends Component {
                 </div>)
         }
         return (
-            //<div>
-            //    <h1>Products</h1>
             //    <p>
             //        <p>Search product by Id:
             //        <input type="number" name="productId" onChange={this.setProductId} min={1} max={9999} />
             //            <button onClick={this.refreshProducts}>Search</button>
             //        </p>
             //    </p>
+
+
+            //<div>
             //    {contents}
             //</div>
+
             <div className="card">
                 <img src={mySvg} alt="aperture" />
                 <Grid
@@ -194,7 +290,7 @@ export class AdventureWorks extends Component {
                         return { name: key, title: key }
                     })
                     }>
-                    <PagingState defaultCurrentPage={this.state.currentPage} defaultPageSize={this.state.pageSize} onCurrentPageChange={this.changeCurrentPage} onPageSizeChange={this.changePageSize} />
+                    <PagingState d defaultCurrentPage={this.state.currentPage} defaultPageSize={this.state.pageSize} onCurrentPageChange={this.changeCurrentPage} onPageSizeChange={this.changePageSize} />
                     <CustomPaging totalCount={totalCount} />
 
                     <FilteringState defaultFilters={[]} />
@@ -249,5 +345,8 @@ export class AdventureWorks extends Component {
         //const data = await response.json();
         //const data2 = data.data.products;       //const data2 = data.items;
         //this.setState({ rows: data2, loading: false });
+        var tmp1 = this.state.totalCount;
+        var stopDebug = queryString;
+        var stopDebug2 = queryString;
     }
 }
