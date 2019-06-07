@@ -124,13 +124,25 @@ export class AdventureWorks extends Component {
     }
 
     queryString2() {
-        const { pageSize, currentPage } = this.state;
+        let { pageSize, currentPage } = this.state;
 
-        return `${URL}?take=${pageSize}&skip=${pageSize * currentPage}`;
+        //return `${URL}?take=${pageSize}&skip=${pageSize * currentPage}`;
+        if (pageSize == 0) {
+            pageSize = this.state.totalCount;
+        }
+        return `graphql?query={productsConnection(first:${pageSize},after:"${pageSize * currentPage}"){totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{startCursor,endCursor,hasPreviousPage,hasNextPage}}}`;
+
+        //'graphql?query={productsConnection(first:10,after:"0"){totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{startCursor,endCursor,hasPreviousPage,hasNextPage}}}'
     }
 
-    changePageSize(event) {
-        this.setState({ pageSize: event.target.value });
+    //changePageSize(event) {
+    //    this.setState({ pageSize: event.target.value });
+    //}
+    changePageSize(pageSize) {
+        if (pageSize == 0) {
+            this.setState({ pageSize: this.state.totalCount })
+        }
+        this.setState({ pageSize });
     }
 
     refreshProducts(event) {
@@ -181,8 +193,8 @@ export class AdventureWorks extends Component {
                     columns={Object.keys(rows[0]).map(function (key) {
                         return { name: key, title: key }
                     })
-                }>
-                    <PagingState defaultCurrentPage={this.state.currentPage} defaultPageSize={this.state.pageSize} />
+                    }>
+                    <PagingState defaultCurrentPage={this.state.currentPage} defaultPageSize={this.state.pageSize} onCurrentPageChange={this.changeCurrentPage} onPageSizeChange={this.changePageSize} />
                     <CustomPaging totalCount={totalCount} />
 
                     <FilteringState defaultFilters={[]} />
@@ -208,14 +220,15 @@ export class AdventureWorks extends Component {
 
     async loadData() {
         //const queryString1 = 'graphql?query={products(productId:-411){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
-        const queryString1 = 'graphql?query={products(take:10,skip:0){productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
-        const queryString2 = 'graphql?query={productsConnection(first:10,after:"0"){totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{startCursor,endCursor,hasPreviousPage,hasNextPage}}}';
+        //const queryString1 = 'graphql?query={products(take:10,skip:0){productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
+        //const queryString2 = 'graphql?query={productsConnection(first:10,after:"0"){totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{startCursor,endCursor,hasPreviousPage,hasNextPage}}}';
 
+        const queryString = this.queryString2();
 
         //graphql1?query={products(first:2,after:'2'){productId}}
         // https://localhost:44385/graphql/graphql1?query={products{productId}}
 
-        fetch(queryString2)
+        fetch(queryString)
             .then(response => response.json())
             .then(data => data.data)
             .then(data =>
@@ -224,7 +237,7 @@ export class AdventureWorks extends Component {
                     totalCount: data.productsConnection.totalCount,
                     loading: false,
                 })).catch(() => this.setState({ loading: false }));
-        this.state.lastQuery = this.state.queryString1;
+        this.state.lastQuery = queryString;
 
         //const response = await fetch(queryString2);
         //const data = await response.json();
