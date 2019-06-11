@@ -129,14 +129,20 @@ namespace GraphQL_1.Data
         // Unable to generate entity type for table 'Production.Document'. Please see the warning messages.
         // Unable to generate entity type for table 'Sales.CustomerPII'. Please see the warning messages.
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseSqlServer("Server=VASIC;Database=AdventureWorks2016_EXT;Trusted_Connection=True;MultipleActiveResultSets=true");
-//            }
-//        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    //            if (!optionsBuilder.IsConfigured)
+        //    //            {
+        //    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+        //    //                optionsBuilder.UseSqlServer("Server=VASIC;Database=AdventureWorks2016_EXT;Trusted_Connection=True;MultipleActiveResultSets=true");
+        //    //            }
+
+        //    optionsBuilder.ConfigureWarnings(
+        //        warnings =>
+        //        {
+        //            warnings.Throw(RelationalEventId.QueryClientEvaluationWarning);
+        //        });
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

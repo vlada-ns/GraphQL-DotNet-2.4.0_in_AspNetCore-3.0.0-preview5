@@ -6,6 +6,8 @@ import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
 import { AdventureWorks } from './components/AdventureWorks';
 
+import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css';
+
 export default class App extends Component {
   static displayName = App.name;
 

@@ -28,7 +28,10 @@ namespace GraphQL_1.SimonCropp
 
             AddQueryConnectionField(
                 name: "productsConnection",
-                resolve: context => context.DbContext.Product,
+                resolve: context => {
+                    //var tmp = context.DbContext.Product.Where(p => p.ProductId.ToString().Contains("3"));
+                    return context.DbContext.Product;
+                },
                 pageSize: int.MaxValue);
 
             AddQueryField(
