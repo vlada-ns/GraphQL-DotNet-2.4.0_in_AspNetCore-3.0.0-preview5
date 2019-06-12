@@ -51,8 +51,8 @@ export class AdventureWorks extends Component {
                 { name: 'size', title: 'Size' },
                 { name: 'sellStartDate', title: 'Sell start date' },
                 { name: 'sellEndDate', title: 'Sell end date' },
-                { name: 'productSubcategory.productSubcategoryId', title: 'Subcategory Id' },
-                { name: 'productSubcategory.name', title: 'Subcategory name' }
+                { name: 'productSubcategoryId', title: 'SubCat Id', getCellValue: row => (row.productSubcategory ? row.productSubcategory.productSubcategoryId : undefined) },
+                { name: 'name', title: 'SubCat name', getCellValue: row => (row.productSubcategory ? row.productSubcategory.name : undefined) },
             ],
             totalCount: 0,
             loading: true,
