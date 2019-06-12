@@ -12,6 +12,7 @@ namespace GraphQL_1.SimonCropp.Graphs
             base(graphQlService)
         {
             Field(x => x.TransactionId);
+            Field(x => x.ProductId);
             Field(x => x.ReferenceOrderId);
             Field(x => x.ReferenceOrderLineId);
             Field(x => x.TransactionDate);
