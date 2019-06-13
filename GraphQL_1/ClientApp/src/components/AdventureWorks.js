@@ -1,16 +1,18 @@
 ﻿import React, { Component } from 'react';
 import * as PropTypes from 'prop-types';
+import '@devexpress/open-iconic-master/font/css/open-iconic-bootstrap.css';
 import '@devexpress/dx-react-grid-bootstrap4/dist/dx-react-grid-bootstrap4.css';
 import {
     FilteringState,
     SortingState,
     // IntegratedSorting,
+    SelectionState,
     PagingState,
     CustomPaging,
-    SelectionState,
+    IntegratedSelection,
     DataTypeProvider,
     TreeDataState,
-    CustomTreeData
+    CustomTreeData,
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
@@ -22,7 +24,8 @@ import {
     TableSelection,
     ColumnChooser,
     TableColumnVisibility,
-    TableTreeColumn
+    TableTreeColumn,
+    VirtualTable
 } from '@devexpress/dx-react-grid-bootstrap4';
 
 const FilterIcon = ({ type }) => {
@@ -36,15 +39,65 @@ const FilterIcon = ({ type }) => {
 
 const ROOT_ID = '';
 
-const getRowId = row => row.productId;
+const getRowId = row => row.transactionId ? row.transactionId : row.productId;
 
-const getChildRows = (currentRow, rootRows) => {        //currentRow  // rootRows
-    const childRows = rootRows.filter(r => r.productId === (r.transactionHistory[0].productId ? r.transactionHistory[0].productId : ROOT_ID));
-    if (childRows.length) {
-        return childRows;
+//const getChildRows = (row, rootRows) => (row ? row.transactionHistory : rootRows);
+const getChildRows = (currentRow, rootRows) => {
+    if (currentRow) {
+        if (currentRow.transactionId) {
+            return null;
+        }
+        if (currentRow.transactionHistory) {
+            return currentRow.transactionHistory;
+        } else {
+            return [];
+        }
+    } else {
+        return rootRows;
     }
-    return currentRow && currentRow.hasItems ? [] : null;
+
+    //const childRows = rootRows.filter(r => r.productId === (currentRow.transactionId ? currentRow.productId : ROOT_ID));
+    //if (childRows.length) {
+    //    return childRows;
+    //}
+    //return currentRow && currentRow.hasItems ? [] : null;
 };
+
+const TableComponent = ({ ...restProps }) => (
+    <Table.Table
+        {...restProps}
+        className="table-striped"
+    />
+);
+
+const HighlightedCell = ({ value, style, ...restProps }) => (
+    <Table.Cell
+        {...restProps}
+        style={{
+            //backgroundColor: value < 5000 ? 'red' : undefined,
+            //...style,
+            backgroundColor: 'BurlyWood'
+        }}
+    >
+         <span
+            style={{
+                color: undefined
+            }}
+        > 
+            {value}
+        </span>
+    </Table.Cell>
+);
+
+const Cell = (props) => {
+    const { column } = props;
+    if (column.name === 'productSubcategoryId' || column.name === 'name2') {
+        return <HighlightedCell {...props} />;
+    }
+    return <Table.Cell {...props} />;
+};
+
+const Root = props => <Grid.Root {...props} style={{ height: '100%', width: '100%', maxHeight: '50em' }} />;
 
 export class AdventureWorks extends Component {
     static displayName = AdventureWorks.name;
@@ -56,6 +109,8 @@ export class AdventureWorks extends Component {
             columns: [
                 { name: 'productId', title: 'Id' },
                 { name: 'name', title: 'Name' },
+                { name: 'transactionId', title: 'Trans Id' },
+                { name: 'transactionType', title: 'Trans Type' },
                 { name: 'productnumber', title: 'Number' },
                 { name: 'makeFlag', title: 'Make flag' },
                 { name: 'color', title: 'Color' },
@@ -65,7 +120,7 @@ export class AdventureWorks extends Component {
                 { name: 'sellStartDate', title: 'Sell start date' },
                 { name: 'sellEndDate', title: 'Sell end date' },
                 { name: 'productSubcategoryId', title: 'SubCat Id', getCellValue: row => (row.productSubcategory ? row.productSubcategory.productSubcategoryId : undefined) },
-                //{ name: 'name', title: 'SubCat name', getCellValue: row => (row.productSubcategory ? row.productSubcategory.name : undefined) }
+                { name: 'name2', title: 'SubCat name', getCellValue: row => (row.productSubcategory ? row.productSubcategory.name : undefined) }
             ],
             totalCount: 0,
             loading: true,
@@ -83,7 +138,8 @@ export class AdventureWorks extends Component {
             intFilterOperations: ['equal', 'notEqual', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual'],
             dateFilterOperations: ['month', 'contains', 'startsWith', 'endsWith'],
             tableColumnExtensions: [
-                { columnName: 'productId', width: 50, wordWrapEnabled: true },
+                { columnName: 'productId' },
+                { columnName: 'name', width: 200, wordWrapEnabled: true },
             ],
             defaultExpandedRowIds: [],
         };
@@ -94,6 +150,7 @@ export class AdventureWorks extends Component {
         this.changePageSize = this.changePageSize.bind(this);
         this.changeFilters = this.changeFilters.bind(this);
         this.changeSorting = this.changeSorting.bind(this);
+        this.changeExpandedRowIds = this.changeExpandedRowIds.bind(this);
     }
 
     componentDidMount() {
@@ -206,8 +263,8 @@ export class AdventureWorks extends Component {
     //    this.setState({ productId: event.target.value });
     //}
 
-    changeSelection(event) {
-        this.setState({ selection: event.target.value });
+    changeSelection(selection) {
+        this.setState({ selection });
     }
 
     createQueryString() {
@@ -261,8 +318,8 @@ export class AdventureWorks extends Component {
             {
                 totalCount,
                 items{ productId, name, productNumber, makeFlag, color, standardCost, listPrice, size, sellStartDate, sellEndDate,
-                    productSubcategory { productSubcategoryId },
-                    transactionHistory { transactionId, productId, referenceOrderId, transactionType } },
+                    productSubcategory { productSubcategoryId, name },
+                    transactionHistory { transactionId, productId, transactionType } },
                 pageInfo{ startCursor, endCursor, hasPreviousPage, hasNextPage }
             }
         }`;
@@ -336,6 +393,10 @@ export class AdventureWorks extends Component {
         });
     }
 
+    changeExpandedRowIds(defaultExpandedRowIds) {
+        this.setState({ defaultExpandedRowIds });
+    }
+
     render() {
         const {
             rows,
@@ -350,7 +411,8 @@ export class AdventureWorks extends Component {
             dateFilterOperations,
             sorting,
             tableColumnExtensions,
-            defaultExpandedRowIds
+            defaultExpandedRowIds,
+            selection
         } = this.state;
 
         //let contents = this.state.loading
@@ -369,12 +431,13 @@ export class AdventureWorks extends Component {
             //<div>
             //    {contents}
             //</div>
-
             <div className="card">
+
                 <Grid
                     rows={rows}
                     columns={columns}       /* Object.keys(rows[0]).map(function (key) {return { name: key, title: key }}) */
-                    /* getRowId={getRowId} */
+                    getRowId={getRowId}
+                    rootComponent={Root}
                 >
 
                     <DataTypeProvider
@@ -387,9 +450,9 @@ export class AdventureWorks extends Component {
                         availableFilterOperations={dateFilterOperations}
                     />
 
-                    <TreeDataState defaultExpandedRowIds={defaultExpandedRowIds} />
+                    <TreeDataState defaultExpandedRowIds={defaultExpandedRowIds} onExpandedRowIdsChange={this.changeExpandedRowIds} />
 
-                    <CustomTreeData getChildRows={getChildRows} />
+                    { /* <CustomTreeData getChildRows={getChildRows} /> */}
 
                     <PagingState defaultCurrentPage={this.state.currentPage} defaultPageSize={pageSize} onCurrentPageChange={this.changeCurrentPage} onPageSizeChange={this.changePageSize} />
                     <CustomPaging totalCount={totalCount} />
@@ -399,14 +462,14 @@ export class AdventureWorks extends Component {
                     <SortingState defaultSorting={sorting} onSortingChange={this.changeSorting} />
                     { /* <IntegratedSorting /> */ }
 
-                    <SelectionState defaultSelection={this.state.selection} onSelectionChange={this.state.changeSelection} />
+                    <SelectionState defaultSelection={selection} onSelectionChange={this.changeSelection} />
 
-                    <Table columnExtensions={tableColumnExtensions} />
+                    <CustomTreeData getChildRows={getChildRows} />
+
+                    <VirtualTable columnExtensions={tableColumnExtensions} tableComponent={TableComponent} cellComponent={Cell} height="auto" />
                     <TableHeaderRow showSortingControls />
                     <TableColumnVisibility defaultHiddenColumnNames={this.state.defaultHiddenColumnNames} />
                     <TableSelection />
-
-                    <TableTreeColumn for="name" showSelectionControls showSelectAll />
 
                     <Toolbar />
                     <ColumnChooser />
@@ -416,6 +479,7 @@ export class AdventureWorks extends Component {
                         messages={{ month: 'Month equals' }}
                     />
                     <PagingPanel pageSizes={this.state.pageSizes} />
+                    <TableTreeColumn for="productId" />
                 </Grid>
             </div>
         );
@@ -433,10 +497,6 @@ export class AdventureWorks extends Component {
         //const queryString2 = 'graphql?query={productsConnection(first:10,after:"0"){totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{startCursor,endCursor,hasPreviousPage,hasNextPage}}}';
 
         const queryString = this.createQueryString();
-        var tmp = queryString;
-        if (tmp) {
-
-        }
 
         //graphql1?query={products(first:2,after:'2'){productId}}
 
