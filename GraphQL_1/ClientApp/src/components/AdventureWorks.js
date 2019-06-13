@@ -157,16 +157,11 @@ export class AdventureWorks extends Component {
         this.loadData();
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps, prevState) {
         const { currentPage, pageSize, filters, sorting } = this.state;
-
-        //var tmp01 = prevProps;
-        //var tmp02 = prevState;
-        //var tmp03 = snapshot;
 
         var tmp1 = currentPage;
         var tmp2 = prevState.currentPage;
-
         var stopDebug = currentPage;
 
         if (currentPage != prevState.currentPage
@@ -212,55 +207,6 @@ export class AdventureWorks extends Component {
     //            <TableFilterRow />
     //        </Grid>
     //    );
-    //}
-
-    //renderProductsTable() {
-    //    return (
-    //        <div className="card">
-    //            <Grid
-    //                rows={rows}
-    //                columns={Object.keys(rows[0]).map(function (key) {
-    //                    return { name: key, title: key }
-    //                })
-    //                }>
-    //                <PagingState d defaultCurrentPage={this.state.currentPage} defaultPageSize={this.state.pageSize} onCurrentPageChange={this.changeCurrentPage} onPageSizeChange={this.changePageSize} />
-    //                <CustomPaging totalCount={totalCount} />
-
-    //                <FilteringState defaultFilters={[]} />
-    //                <IntegratedFiltering />
-
-    //                <SortingState defaultSorting={[{ columnName: 'productId', direction: 'asc' }]} />
-    //                <IntegratedSorting />
-
-    //                <SelectionState defaultSelection={this.state.selection} onSelectionChange={this.state.changeSelection} />
-
-    //                <Table />
-    //                <TableHeaderRow allowSorting showSortingControls />
-    //                <PagingPanel pageSizes={this.state.pageSizes} />
-    //                <TableColumnVisibility defaultHiddenColumnNames={this.state.defaultHiddenColumnNames} />
-    //                <TableSelection />
-    //                <Toolbar />
-    //                <ColumnChooser />
-    //                <TableFilterRow />
-    //            </Grid>
-    //        </div>
-    //    );
-    //}
-
-    //queryStringMethod() {
-    //    const { searchValue } = this.state;
-    //    var qString = '';
-
-    //    if (searchValue <= 0 || searchValue > 9999) {
-    //        searchValue = -411;
-    //    }
-    //    qString = 'graphql?query={products(productId:' + searchValue + '){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
-
-    //    return qString;
-    //}
-
-    //setProductId(event) {
-    //    this.setState({ productId: event.target.value });
     //}
 
     changeSelection(selection) {
@@ -313,9 +259,7 @@ export class AdventureWorks extends Component {
                 ,orderBy: {
                     path: "${columnSorting.columnName}",
                     descending: ${sortDirection}
-                }
-            ),
-            {
+                }), {
                 totalCount,
                 items{ productId, name, productNumber, makeFlag, color, standardCost, listPrice, size, sellStartDate, sellEndDate,
                     productSubcategory { productSubcategoryId, name },
@@ -323,27 +267,6 @@ export class AdventureWorks extends Component {
                 pageInfo{ startCursor, endCursor, hasPreviousPage, hasNextPage }
             }
         }`;
-
-        //transactionHistory{
-        //    transactionId,
-        //        referenceOrderId,
-        //        transactionType
-        //}
-
-        // (where:{path:"productId",comparison:"equal",value:3})
-
-        //qString = `graphql?query={
-        //    products(where:{path:"productId",comparison:"equal",value:"3"}){
-        //        productId,
-        //        name,
-        //        productNumber,
-        //        makeFlag,
-        //        color,
-        //        standardCost,
-        //        listPrice,
-        //        size,
-        //        sellStartDate,
-        //        sellEndDate}}`;
 
         this.setState({ queryString: qString });
         return qString;
@@ -486,19 +409,11 @@ export class AdventureWorks extends Component {
     }
 
     async loadData() {
-        //const queryString = this.queryString();
-        //if (queryString === this.lastQuery) {
+        const queryString = this.createQueryString();
+        //if (queryString === this.state.lastQuery) {
         //    this.setState({ loading: false });
         //    return;
         //}
-
-        //const queryString1 = 'graphql?query={products(productId:-411){productId:productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
-        //const queryString1 = 'graphql?query={products(take:10,skip:0){productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}}';
-        //const queryString2 = 'graphql?query={productsConnection(first:10,after:"0"){totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{startCursor,endCursor,hasPreviousPage,hasNextPage}}}';
-
-        const queryString = this.createQueryString();
-
-        //graphql1?query={products(first:2,after:'2'){productId}}
 
         //fetch(queryString)
         //    .then(response => response.json())
@@ -514,10 +429,6 @@ export class AdventureWorks extends Component {
         //        this.setState({ loading: false });
         //    })
         //    .catch(() => this.setState({ loading: false }));
-
-        // var tmpString = "graphql?query={productsConnection(first: 50,after: " - 1", where: { path: "name", comparison: "equal", value: "ada" },orderBy: {path: "productId",descending: false}),{totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{ startCursor, endCursor, hasPreviousPage, hasNextPage }}}";
-        // var tmpString2 = "graphql?query={productsConnection(first: 50,after: ' - 1', where: { path: 'name', comparison: 'equal', value: 'ada' },orderBy: {path: 'productId',descending: false}),{totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{ startCursor, endCursor, hasPreviousPage, hasNextPage }}}";
-        // var tmpString3 = "graphql?query={productsConnection(first: 50,after: " + " - 1" + ", where: { path: " + "name" + ", comparison: " + "equal" + ", value: " + "ada" + " },orderBy: {path: " + "productId" + ",descending: false}),{totalCount,items{productId,name,productNumber,makeFlag,color,standardCost,listPrice,size,sellStartDate,sellEndDate}pageInfo{ startCursor, endCursor, hasPreviousPage, hasNextPage }}}";
 
         const response = await fetch(queryString);
         //if (response.ok) {
