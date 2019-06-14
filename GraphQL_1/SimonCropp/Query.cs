@@ -30,7 +30,37 @@ namespace GraphQL_1.SimonCropp
                 name: "productsConnection",
                 resolve: context => {
                     //var tmp = context.DbContext.Product.Where(p => p.ProductId.ToString().Contains("3"));
-                    return context.DbContext.Product;
+
+                    //var groupings = list.SelectMany(x => x.AdditionalPropertyList).GroupBy(x => x.PartNumber).Select(g => new { PartNumber = g.Key, Quantity = g.Sum(x => x.Quantity) });
+
+                    //var tmp3 = context.DbContext.TransactionHistory
+                    //.SelectMany(th => th.TransactionType)
+                    //.GroupBy(th => th.)
+
+                    //var tmp2 = context.DbContext.TransactionHistory
+                    //.GroupBy(x => x.TransactionType)
+                    //.Select(s => new
+                    //{
+                    //    TransType = s.Key,
+                    //    aggregatedCost = s.ToList().Aggregate(0, (a,b) => a + b)
+                    //});
+
+                    //.Aggregate(x => x., (a, b.) => a + b)
+
+                    //.Aggregate(0, (a, b) => a +b)
+                    //.GroupBy(x => x.TransactionType)
+                    //.Select(s => new {
+                    //    TransType = s.Key,
+                    //    aggregatedCost = s.Aggregate(0, (a, b.ActualCost) => a + b)
+                    //});
+
+
+
+
+                    //return context.DbContext.Product;
+                    var products = context.DbContext.Product;
+                    var tmp = products;
+                    return products;
                 },
                 pageSize: int.MaxValue);
 

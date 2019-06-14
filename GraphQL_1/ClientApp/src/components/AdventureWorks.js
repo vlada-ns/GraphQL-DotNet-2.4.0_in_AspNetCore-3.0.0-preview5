@@ -109,8 +109,8 @@ export class AdventureWorks extends Component {
             columns: [
                 { name: 'productId', title: 'Id' },
                 { name: 'name', title: 'Name' },
-                { name: 'transactionId', title: 'Trans Id' },
-                { name: 'transactionType', title: 'Trans Type' },
+                //{ name: 'transactionId', title: 'Trans Id' },
+                //{ name: 'transactionType', title: 'Trans Type' },
                 { name: 'productnumber', title: 'Number' },
                 { name: 'makeFlag', title: 'Make flag' },
                 { name: 'color', title: 'Color' },
