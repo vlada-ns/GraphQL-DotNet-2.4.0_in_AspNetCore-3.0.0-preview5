@@ -54,7 +54,54 @@ namespace GraphQL_1.SimonCropp
                     //    aggregatedCost = s.Aggregate(0, (a, b.ActualCost) => a + b)
                     //});
 
+                    //var tmp5 = context.DbContext.Product
+                    //    .Select(products => new
+                    //    {
+                    //        ProductId = products.ProductId,
+                    //        Name = products.Name,
+                    //        ProductNumber = products.ProductNumber,
+                    //        Quantity = products.TransactionHistory.Where(th => th.ProductId == products.ProductId)
+                    //    })
+                    //    .Where(p => p.TransactionHistory
+                    //        .Where(th => th.Quantity > -1)
+                    //        .Count()
 
+
+                    //    .GroupBy(p => p.ProductId)
+                    //    .Aggregate(p => p.)
+
+
+//                    SELECT p.ProductID,
+//			p.[Name],
+//			p.ProductNumber,
+//			p.MakeFlag,
+//			p.Color,
+//			p.ReorderPoint,
+//			/* th.TransactionType, */
+//			COUNT(th.Quantity) AS CountOfTransactionHistoryQuantity
+//  FROM[AdventureWorks2016_EXT].[Production].[Product] p LEFT JOIN
+//    [AdventureWorks2016_EXT].[Production].[TransactionHistory] th
+//ON p.ProductID = th.ProductID
+///* WHERE th.TransactionType = 'W'	OR
+//		th.TransactionType = 'P'	OR
+//		th.TransactionType = 'S'	OR
+//		th.TransactionType IS NULL */
+//  GROUP BY  p.ProductID, p.[Name], p.ProductNumber, p.MakeFlag, p.Color, p.ReorderPoint /* th.TransactionType */
+//  ORDER BY p.ProductID
+
+
+//    SELECT  p.ProductID,
+//			p.[Name],
+//			p.ProductNumber,
+//			p.MakeFlag,
+//			p.Color,
+//			p.ReorderPoint,
+//			COUNT(th.Quantity) AS CountOfTransactionHistoryQuantity
+//  FROM[AdventureWorks2016_EXT].[Production].[Product] p LEFT JOIN
+//    [AdventureWorks2016_EXT].[Production].[TransactionHistory] th
+//ON p.ProductID = th.ProductID
+//  GROUP BY  p.ProductID, p.[Name], p.ProductNumber, p.MakeFlag, p.Color, p.ReorderPoint /* th.TransactionType */
+//  ORDER BY p.ProductID
 
 
                     //return context.DbContext.Product;

@@ -387,7 +387,7 @@ export class AdventureWorks extends Component {
 
                     <SelectionState defaultSelection={selection} onSelectionChange={this.changeSelection} />
 
-                    <CustomTreeData getChildRows={getChildRows} />
+                    { /* <CustomTreeData getChildRows={getChildRows} /> */}
 
                     <VirtualTable columnExtensions={tableColumnExtensions} tableComponent={TableComponent} cellComponent={Cell} height="auto" />
                     <TableHeaderRow showSortingControls />
@@ -402,7 +402,7 @@ export class AdventureWorks extends Component {
                         messages={{ month: 'Month equals' }}
                     />
                     <PagingPanel pageSizes={this.state.pageSizes} />
-                    <TableTreeColumn for="productId" />
+                    { /* <TableTreeColumn for="productId" /> */}
                 </Grid>
             </div>
         );
