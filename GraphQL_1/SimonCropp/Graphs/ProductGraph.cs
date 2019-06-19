@@ -2,6 +2,7 @@
 using GraphQL.Types;
 using GraphQL_1.Data;
 using GraphQL_1.Models;
+using System.Linq;
 
 namespace GraphQL_1.SimonCropp.Graphs
 {
@@ -34,6 +35,9 @@ namespace GraphQL_1.SimonCropp.Graphs
             Field(x => x.DiscontinuedDate, nullable: true);
             Field(x => x.Rowguid, type: typeof(IdGraphType));
             Field(x => x.ModifiedDate);
+            Field("CountOfTransactionHistoryByTypeW", x => x.TransactionHistory.Where(th => th.TransactionType == "W").Count());
+            Field("CountOfTransactionHistoryByTypeS", x => x.TransactionHistory.Where(th => th.TransactionType == "S").Count());
+            Field("CountOfTransactionHistoryByTypeP", x => x.TransactionHistory.Where(th => th.TransactionType == "P").Count());
             AddNavigationListField(
                 name: "productReview",
                 resolve: context => context.Source.ProductReview);
