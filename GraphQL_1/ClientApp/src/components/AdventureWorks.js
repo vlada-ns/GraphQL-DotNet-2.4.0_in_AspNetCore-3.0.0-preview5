@@ -39,9 +39,19 @@ const FilterIcon = ({ type }) => {
 
 const ROOT_ID = '';
 
+// Original example from --> https://devexpress.github.io/devextreme-reactive/react/grid/docs/guides/tree-data/ --> Load Remote Data on Demand
+//const getRowId = row => row.id;
 const getRowId = row => row.transactionId ? row.transactionId : row.productId;
 
 //const getChildRows = (row, rootRows) => (row ? row.transactionHistory : rootRows);
+// Original example from --> https://devexpress.github.io/devextreme-reactive/react/grid/docs/guides/tree-data/ --> Load Remote Data on Demand
+    //const getChildRows = (row, rootRows) => {
+    //    const childRows = rootRows.filter(r => r.parentId === (row ? row.id : ROOT_ID));
+    //    if (childRows.length) {
+    //        return childRows;
+    //    }
+    //    return row && row.hasItems ? [] : null;
+    //};
 const getChildRows = (currentRow, rootRows) => {
     if (currentRow) {
         if (currentRow.transactionId) {
@@ -55,12 +65,6 @@ const getChildRows = (currentRow, rootRows) => {
     } else {
         return rootRows;
     }
-
-    //const childRows = rootRows.filter(r => r.productId === (currentRow.transactionId ? currentRow.productId : ROOT_ID));
-    //if (childRows.length) {
-    //    return childRows;
-    //}
-    //return currentRow && currentRow.hasItems ? [] : null;
 };
 
 const TableComponent = ({ ...restProps }) => (
@@ -176,41 +180,6 @@ export class AdventureWorks extends Component {
             this.loadData();
         }
     }
-
-    //static renderProductsTable(rows, defaultHiddenColumnNames) {
-    //    return (
-    //        <Grid
-    //            rows={rows}
-    //            columns={Object.keys(rows[0]).map(function (key) {
-    //                    return { name: key, title: key }
-    //                })
-    //            }>
-
-    //            <SearchState deafaultValue="" />
-                
-    //            <PagingState defaultCurrentPage={0} pageSize={10} />
-    //            <IntegratedPaging />
-
-    //            <FilteringState defaultFilters={[]} />
-    //            <IntegratedFiltering />
-                
-    //            <SortingState defaultSorting={[{ columnName: 'productId', direction: 'asc' }]} />
-    //            <IntegratedSorting />
-
-    //            <SelectionState onSelectionChange={this.caller.changeSelection} />  {/* defaultSelection={selection} */}
-
-    //            <Table />
-    //            <TableHeaderRow allowSorting showSortingControls />
-    //            <TableColumnVisibility defaultHiddenColumnNames={defaultHiddenColumnNames} />
-    //            <TableSelection />
-    //            <Toolbar />
-    //            <ColumnChooser />
-    //            <SearchPanel />
-    //            <PagingPanel pageSizes={this.state.pageSizes} />
-    //            <TableFilterRow />
-    //        </Grid>
-    //    );
-    //}
 
     changeSelection(selection) {
         this.setState({ selection });
