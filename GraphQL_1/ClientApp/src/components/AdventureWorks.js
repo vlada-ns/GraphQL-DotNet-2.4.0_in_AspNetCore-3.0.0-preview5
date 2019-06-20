@@ -121,9 +121,9 @@ export class AdventureWorks extends Component {
                 { name: 'sellEndDate', title: 'Sell end date' },
                 { name: 'productSubcategoryId', title: 'SubCat Id', getCellValue: row => (row.productSubcategory ? row.productSubcategory.productSubcategoryId : undefined) },
                 { name: 'name2', title: 'SubCat name', getCellValue: row => (row.productSubcategory ? row.productSubcategory.name : undefined) },
-                { name: 'countOfTransactionHistoryByTypeW', title: 'Type W' },
-                { name: 'countOfTransactionHistoryByTypeS', title: 'Type S' },
-                { name: 'countOfTransactionHistoryByTypeP', title: 'Type P' },
+                { name: 'aggOfTransactionHistoryByTypeW', title: 'Agg TypeW' },
+                { name: 'aggOfTransactionHistoryByTypeS', title: 'Agg TypeS' },
+                { name: 'aggOfTransactionHistoryByTypeP', title: 'Agg TypeP' },
             ],
             totalCount: 0,
             loading: true,
@@ -264,7 +264,7 @@ export class AdventureWorks extends Component {
                     descending: ${sortDirection}
                 }), {
                 totalCount,
-                items{ productId, name, productNumber, makeFlag, color, standardCost, listPrice, size, sellStartDate, sellEndDate, countOfTransactionHistoryByTypeW, countOfTransactionHistoryByTypeS, countOfTransactionHistoryByTypeP,
+                items{ productId, name, productNumber, makeFlag, color, standardCost, listPrice, size, sellStartDate, sellEndDate, aggOfTransactionHistoryByTypeW, aggOfTransactionHistoryByTypeS, aggOfTransactionHistoryByTypeP,
                     productSubcategory { productSubcategoryId, name },
                     transactionHistory { transactionId, productId, transactionType } },
                 pageInfo{ startCursor, endCursor, hasPreviousPage, hasNextPage }

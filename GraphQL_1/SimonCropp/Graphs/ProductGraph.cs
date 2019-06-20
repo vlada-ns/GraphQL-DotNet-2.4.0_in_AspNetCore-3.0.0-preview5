@@ -35,9 +35,16 @@ namespace GraphQL_1.SimonCropp.Graphs
             Field(x => x.DiscontinuedDate, nullable: true);
             Field(x => x.Rowguid, type: typeof(IdGraphType));
             Field(x => x.ModifiedDate);
-            Field("CountOfTransactionHistoryByTypeW", x => x.TransactionHistory.Where(th => th.TransactionType == "W").Count());
-            Field("CountOfTransactionHistoryByTypeS", x => x.TransactionHistory.Where(th => th.TransactionType == "S").Count());
-            Field("CountOfTransactionHistoryByTypeP", x => x.TransactionHistory.Where(th => th.TransactionType == "P").Count());
+            //Aggregation by TransactionType
+            Field("AggOfTransactionHistoryByTypeW", x => x.TransactionHistory.Where(th => th.ProductId == x.ProductId && th.TransactionType == "W").Select(th => th.Quantity).Aggregate(0, (res, item) => res + item));
+            Field("AggOfTransactionHistoryByTypeS", x => x.TransactionHistory.Where(th => th.ProductId == x.ProductId && th.TransactionType == "S").Select(th => th.Quantity).Aggregate(0, (res, item) => res + item));
+            Field("AggOfTransactionHistoryByTypeP", x => x.TransactionHistory.Where(th => th.ProductId == x.ProductId && th.TransactionType == "P").Select(th => th.Quantity).Aggregate(0, (res, item) => res + item));
+            //Overall Aggregation
+            //Field("AggOfTransactionHistoryByType", x => x.TransactionHistory.Select(th => th.Quantity).Aggregate((res, item) => res + item));
+            //Count by TransactionType
+            //Field("CountOfTransactionHistoryByTypeW", x => x.TransactionHistory.Where(th => th.TransactionType == "W").Count());
+            //Field("CountOfTransactionHistoryByTypeS", x => x.TransactionHistory.Where(th => th.TransactionType == "S").Count());
+            //Field("CountOfTransactionHistoryByTypeP", x => x.TransactionHistory.Where(th => th.TransactionType == "P").Count());
             AddNavigationListField(
                 name: "productReview",
                 resolve: context => context.Source.ProductReview);
