@@ -443,31 +443,3 @@ export class AdventureWorks extends Component {
         var stopDebug2 = queryString;
     }
 }
-
-// GraphQL PLAYGROUND query
-//
-//query Products {
-//    productsConnection(
-//        first: 10,
-//        after: "-1",
-//        where: {
-//            path: "productId",
-//            comparison: "equal",
-//            value: "3"
-//        })
-//    {
-//        totalCount,
-//            items{
-//            productId,
-//                name,
-//                productNumber,
-//                makeFlag,
-//                color,
-//                standardCost,
-//                listPrice,
-//                size,
-//                sellStartDate,
-//                sellEndDate
-//        }
-//    }
-//}
